@@ -1,0 +1,455 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0547F2181DAD0C9B944F39E8 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4502C000B1FEB6F9DF2EAB53 /* PersistenceManager.swift */; };
+		082C9A44C468BF4361F23D98 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F02F30F3F9F8EFA01DF83EF /* PreferencesView.swift */; };
+		1B240E73A90EAD8889A90D2A /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D618707B3F705ACE52424895 /* MenuBarView.swift */; };
+		2C7F3230D379F7DA9CFF6E22 /* AudioTapProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784CEC7FD49A60494C3FA760 /* AudioTapProcessor.swift */; };
+		3643C25E5287EF4CC1859CA2 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601C7B2133257A9C9735A260 /* SearchView.swift */; };
+		3F67CB9E0C5AD1DED1976869 /* PresetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC06BF0652A3A446C13F9A /* PresetsView.swift */; };
+		4C7DB549004950CD25CB3FD9 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EFC64DC037FED3225717580 /* ServiceManagement.framework */; };
+		5C64C5FC860CC0B65BEDCC9C /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32D244A47C8830C09C735E15 /* UserNotifications.framework */; };
+		631AE5E27D92EE1B93DFC6E3 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76FD1628B656B54DB8BDD92D /* AVFoundation.framework */; };
+		77E4440D9251DA142309855B /* StationRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5726461EF622DD95A60AE66D /* StationRowView.swift */; };
+		7DF227BB325129F21FCF359D /* RadioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF55100D6E7CE687DB181F1D /* RadioPlayer.swift */; };
+		7E0F9D0342DAFECF73ED70DE /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5271FEA2E84E09FEA03670E8 /* MediaPlayer.framework */; };
+		81CC30E0AC251965E93B9D2B /* DumbosRadioApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09956C042F61E6C9DAB9C44A /* DumbosRadioApp.swift */; };
+		94635CB85A7538F2EC0F87D9 /* StationBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A87E3089E0FB2AED3BBDF57 /* StationBrowserView.swift */; };
+		97B82853267AFBE218604962 /* StationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA134E40F9CB0C05CD1170C6 /* StationListView.swift */; };
+		AD7B469309FE5A0368142287 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4551550294CEE61A4F1104E6 /* AppDelegate.swift */; };
+		B0B27EC3FB467C937E74E527 /* StationArtworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6155ECB31E05B8AA3BE01AA8 /* StationArtworkView.swift */; };
+		B816BFE4A8DCF82E6F720815 /* VisualizerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C6E22B4C8CB0D1C3877E13 /* VisualizerView.swift */; };
+		BC1C885C7906C822712D3DBA /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC841C0EC9532DF4F118EB55 /* PlayerView.swift */; };
+		CDE4E30ED60EF23DA4479D00 /* RadioBrowserAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4647743AF4FF132E9FE2E16 /* RadioBrowserAPI.swift */; };
+		D2249B34CCE92A1B270D16C8 /* NowPlayingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 391B13E88E3E58696E019DFA /* NowPlayingManager.swift */; };
+		D95856DCAA96632681E6C52D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1233B6D481F15858C74A86D5 /* Assets.xcassets */; };
+		E0148044836A7BE6B3BE2756 /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73556213FE4FB69A042F2D0 /* Station.swift */; };
+		E883890FBD02591C21DBE487 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46A3EB58E06EA11C9DBEDFEE /* Accelerate.framework */; };
+		EA450379EBD00277FDBD843B /* MediaToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF453C333FE2F68320C42570 /* MediaToolbox.framework */; };
+		EFAEAD261511C4514A37E002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729B0EB484DA3446B554B03C /* ContentView.swift */; };
+		F80895623CAC7C2B59E08B93 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E89A3D285B62561F3027619 /* NotificationManager.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		09956C042F61E6C9DAB9C44A /* DumbosRadioApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DumbosRadioApp.swift; sourceTree = "<group>"; };
+		1233B6D481F15858C74A86D5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2EBC06BF0652A3A446C13F9A /* PresetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetsView.swift; sourceTree = "<group>"; };
+		2F02F30F3F9F8EFA01DF83EF /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
+		32D244A47C8830C09C735E15 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		391B13E88E3E58696E019DFA /* NowPlayingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingManager.swift; sourceTree = "<group>"; };
+		3EFC64DC037FED3225717580 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
+		4502C000B1FEB6F9DF2EAB53 /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
+		4551550294CEE61A4F1104E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		46A3EB58E06EA11C9DBEDFEE /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		5271FEA2E84E09FEA03670E8 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		5726461EF622DD95A60AE66D /* StationRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationRowView.swift; sourceTree = "<group>"; };
+		5A87E3089E0FB2AED3BBDF57 /* StationBrowserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationBrowserView.swift; sourceTree = "<group>"; };
+		601C7B2133257A9C9735A260 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		6155ECB31E05B8AA3BE01AA8 /* StationArtworkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationArtworkView.swift; sourceTree = "<group>"; };
+		729B0EB484DA3446B554B03C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		76FD1628B656B54DB8BDD92D /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		784CEC7FD49A60494C3FA760 /* AudioTapProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioTapProcessor.swift; sourceTree = "<group>"; };
+		7AAD06A48E0B195C2374BF6A /* DumbosRadio.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DumbosRadio.entitlements; sourceTree = "<group>"; };
+		7E89A3D285B62561F3027619 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		94C6E22B4C8CB0D1C3877E13 /* VisualizerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualizerView.swift; sourceTree = "<group>"; };
+		A4647743AF4FF132E9FE2E16 /* RadioBrowserAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioBrowserAPI.swift; sourceTree = "<group>"; };
+		AF55100D6E7CE687DB181F1D /* RadioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioPlayer.swift; sourceTree = "<group>"; };
+		B73556213FE4FB69A042F2D0 /* Station.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Station.swift; sourceTree = "<group>"; };
+		BF453C333FE2F68320C42570 /* MediaToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaToolbox.framework; path = System/Library/Frameworks/MediaToolbox.framework; sourceTree = SDKROOT; };
+		CC841C0EC9532DF4F118EB55 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		D618707B3F705ACE52424895 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
+		DB439A4BACEAD5D82F809A75 /* DumbosRadio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DumbosRadio.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA134E40F9CB0C05CD1170C6 /* StationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationListView.swift; sourceTree = "<group>"; };
+		F6232A273A185F83E088F04F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2EC57271193F639E23AAD0D3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				631AE5E27D92EE1B93DFC6E3 /* AVFoundation.framework in Frameworks */,
+				7E0F9D0342DAFECF73ED70DE /* MediaPlayer.framework in Frameworks */,
+				EA450379EBD00277FDBD843B /* MediaToolbox.framework in Frameworks */,
+				E883890FBD02591C21DBE487 /* Accelerate.framework in Frameworks */,
+				4C7DB549004950CD25CB3FD9 /* ServiceManagement.framework in Frameworks */,
+				5C64C5FC860CC0B65BEDCC9C /* UserNotifications.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		304032C8B9F9F7B1E7A52778 = {
+			isa = PBXGroup;
+			children = (
+				BDD375E2A4C10B23BDF21251 /* DumbosRadio */,
+				8C1D7FE85A03228B274F260D /* Frameworks */,
+				415509F86490F3D32BA741DA /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		415509F86490F3D32BA741DA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DB439A4BACEAD5D82F809A75 /* DumbosRadio.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		431A396DD2D0CF817E889664 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D618707B3F705ACE52424895 /* MenuBarView.swift */,
+				CC841C0EC9532DF4F118EB55 /* PlayerView.swift */,
+				2F02F30F3F9F8EFA01DF83EF /* PreferencesView.swift */,
+				2EBC06BF0652A3A446C13F9A /* PresetsView.swift */,
+				601C7B2133257A9C9735A260 /* SearchView.swift */,
+				6155ECB31E05B8AA3BE01AA8 /* StationArtworkView.swift */,
+				5A87E3089E0FB2AED3BBDF57 /* StationBrowserView.swift */,
+				EA134E40F9CB0C05CD1170C6 /* StationListView.swift */,
+				5726461EF622DD95A60AE66D /* StationRowView.swift */,
+				94C6E22B4C8CB0D1C3877E13 /* VisualizerView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		816E12CC27F26F571ED10214 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B73556213FE4FB69A042F2D0 /* Station.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		8C1D7FE85A03228B274F260D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				46A3EB58E06EA11C9DBEDFEE /* Accelerate.framework */,
+				76FD1628B656B54DB8BDD92D /* AVFoundation.framework */,
+				5271FEA2E84E09FEA03670E8 /* MediaPlayer.framework */,
+				BF453C333FE2F68320C42570 /* MediaToolbox.framework */,
+				3EFC64DC037FED3225717580 /* ServiceManagement.framework */,
+				32D244A47C8830C09C735E15 /* UserNotifications.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A553AD432B524D41C7D13567 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				784CEC7FD49A60494C3FA760 /* AudioTapProcessor.swift */,
+				7E89A3D285B62561F3027619 /* NotificationManager.swift */,
+				391B13E88E3E58696E019DFA /* NowPlayingManager.swift */,
+				4502C000B1FEB6F9DF2EAB53 /* PersistenceManager.swift */,
+				A4647743AF4FF132E9FE2E16 /* RadioBrowserAPI.swift */,
+				AF55100D6E7CE687DB181F1D /* RadioPlayer.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		BDD375E2A4C10B23BDF21251 /* DumbosRadio */ = {
+			isa = PBXGroup;
+			children = (
+				4551550294CEE61A4F1104E6 /* AppDelegate.swift */,
+				1233B6D481F15858C74A86D5 /* Assets.xcassets */,
+				729B0EB484DA3446B554B03C /* ContentView.swift */,
+				7AAD06A48E0B195C2374BF6A /* DumbosRadio.entitlements */,
+				09956C042F61E6C9DAB9C44A /* DumbosRadioApp.swift */,
+				F6232A273A185F83E088F04F /* Info.plist */,
+				816E12CC27F26F571ED10214 /* Models */,
+				A553AD432B524D41C7D13567 /* Services */,
+				431A396DD2D0CF817E889664 /* Views */,
+			);
+			path = DumbosRadio;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8A7B93481F69222CB44EFACE /* DumbosRadio */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 27E7A7D254EAB915F1CA6C2D /* Build configuration list for PBXNativeTarget "DumbosRadio" */;
+			buildPhases = (
+				D3CDCF39D7C885F9EF72C51F /* Sources */,
+				465B4D0C817C628ADDA304D4 /* Resources */,
+				2EC57271193F639E23AAD0D3 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DumbosRadio;
+			packageProductDependencies = (
+			);
+			productName = DumbosRadio;
+			productReference = DB439A4BACEAD5D82F809A75 /* DumbosRadio.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4DD02B1587A31D221348754C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					8A7B93481F69222CB44EFACE = {
+						ProvisioningStyle = Manual;
+					};
+				};
+			};
+			buildConfigurationList = C1E593E55664206DE57FD07E /* Build configuration list for PBXProject "DumbosRadio" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 304032C8B9F9F7B1E7A52778;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8A7B93481F69222CB44EFACE /* DumbosRadio */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		465B4D0C817C628ADDA304D4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D95856DCAA96632681E6C52D /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D3CDCF39D7C885F9EF72C51F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD7B469309FE5A0368142287 /* AppDelegate.swift in Sources */,
+				2C7F3230D379F7DA9CFF6E22 /* AudioTapProcessor.swift in Sources */,
+				EFAEAD261511C4514A37E002 /* ContentView.swift in Sources */,
+				81CC30E0AC251965E93B9D2B /* DumbosRadioApp.swift in Sources */,
+				1B240E73A90EAD8889A90D2A /* MenuBarView.swift in Sources */,
+				F80895623CAC7C2B59E08B93 /* NotificationManager.swift in Sources */,
+				D2249B34CCE92A1B270D16C8 /* NowPlayingManager.swift in Sources */,
+				0547F2181DAD0C9B944F39E8 /* PersistenceManager.swift in Sources */,
+				BC1C885C7906C822712D3DBA /* PlayerView.swift in Sources */,
+				082C9A44C468BF4361F23D98 /* PreferencesView.swift in Sources */,
+				3F67CB9E0C5AD1DED1976869 /* PresetsView.swift in Sources */,
+				CDE4E30ED60EF23DA4479D00 /* RadioBrowserAPI.swift in Sources */,
+				7DF227BB325129F21FCF359D /* RadioPlayer.swift in Sources */,
+				3643C25E5287EF4CC1859CA2 /* SearchView.swift in Sources */,
+				E0148044836A7BE6B3BE2756 /* Station.swift in Sources */,
+				B0B27EC3FB467C937E74E527 /* StationArtworkView.swift in Sources */,
+				94635CB85A7538F2EC0F87D9 /* StationBrowserView.swift in Sources */,
+				97B82853267AFBE218604962 /* StationListView.swift in Sources */,
+				77E4440D9251DA142309855B /* StationRowView.swift in Sources */,
+				B816BFE4A8DCF82E6F720815 /* VisualizerView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		3122A61C0B680D04651CC56F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		359B00EF40DA5DE71E5E89D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = DumbosRadio/DumbosRadio.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = DumbosRadio/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.miles.NotMyFirstRadio;
+				PRODUCT_NAME = "Not My First Radio";
+				SDKROOT = macosx;
+				SWIFT_STRICT_CONCURRENCY = minimal;
+			};
+			name = Release;
+		};
+		C6F7145C792CB62EA53852D2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = DumbosRadio/DumbosRadio.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = DumbosRadio/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.miles.NotMyFirstRadio;
+				PRODUCT_NAME = "Not My First Radio";
+				SDKROOT = macosx;
+				SWIFT_STRICT_CONCURRENCY = minimal;
+			};
+			name = Debug;
+		};
+		F4FB79B44506CB0E789D056A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		27E7A7D254EAB915F1CA6C2D /* Build configuration list for PBXNativeTarget "DumbosRadio" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C6F7145C792CB62EA53852D2 /* Debug */,
+				359B00EF40DA5DE71E5E89D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C1E593E55664206DE57FD07E /* Build configuration list for PBXProject "DumbosRadio" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3122A61C0B680D04651CC56F /* Debug */,
+				F4FB79B44506CB0E789D056A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4DD02B1587A31D221348754C /* Project object */;
+}

@@ -1,0 +1,17 @@
+# Build output
+build/
+
+# macOS
+.DS_Store
+
+# Xcode
+*.xcuserstate
+xcuserdata/
+DumbosRadio.xcodeproj/xcuserdata/
+DumbosRadio.xcodeproj/project.xcworkspace/xcuserdata/
+*.moved-aside
+*.orig
+
+# Swift Package Manager
+.build/
+*.resolved
