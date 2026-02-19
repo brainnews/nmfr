@@ -11,13 +11,10 @@ struct PlayerView: View {
 
     var body: some View {
         ZStack {
-            // Visualizer behind everything
-            if persistence.visualizerEnabled {
-                if player.state.isPlaying {
-                    VisualizerView(player: player, isPlaying: true)
-                } else {
-                    IdleVisualizerView()
-                }
+            // Visualizer behind everything — hidden when idle/stopped to avoid a flat line.
+            // Loading shows the animated sine waves since there's no audio signal yet.
+            if persistence.visualizerEnabled && player.isActive {
+                VisualizerView(player: player, isPlaying: true)
             }
 
             // Player content
@@ -32,8 +29,8 @@ struct PlayerView: View {
                         .foregroundStyle(.primary)
                         .lineLimit(1)
 
-                    // Meta
-                    Text(player.currentStation?.metaString ?? "Select a station to begin")
+                    // Meta — replaced by live stream title when available
+                    Text(player.streamTitle ?? player.currentStation?.metaString ?? "Select a station to begin")
                         .font(.system(size: 10, design: .monospaced))
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
@@ -87,13 +84,11 @@ struct PlayerView: View {
                         .frame(maxWidth: .infinity)
                     }
 
-                    // Status / now-playing — always rendered to reserve space, invisible when nil.
-                    // Priority: loading/error text > live stream title > hidden.
-                    Text(player.state.statusText ?? (player.state.isPlaying ? player.streamTitle : nil) ?? " ")
+                    // Status — always rendered to reserve space, invisible when nil
+                    Text(player.state.statusText ?? " ")
                         .font(.system(size: 9, design: .monospaced))
-                        .foregroundStyle(player.state.statusText != nil ? Color.accentColor : .secondary)
-                        .lineLimit(1)
-                        .opacity((player.state.statusText != nil || (player.state.isPlaying && player.streamTitle != nil)) ? 1 : 0)
+                        .foregroundStyle(Color.accentColor)
+                        .opacity(player.state.statusText != nil ? 1 : 0)
                 }
             }
             .padding(.horizontal, 14)
