@@ -1,4 +1,5 @@
 import SwiftUI
+import AppKit
 
 struct PlayerView: View {
     @EnvironmentObject var player: RadioPlayer
@@ -40,10 +41,32 @@ struct PlayerView: View {
                         .lineLimit(1)
 
                     // Meta — replaced by live stream title when available
-                    Text(player.streamTitle ?? player.currentStation?.metaString ?? "Select a station to begin")
-                        .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
+                    HStack(spacing: 6) {
+                        Text(player.streamTitle ?? player.currentStation?.metaString ?? "Select a station to begin")
+                            .font(.system(size: 10, design: .monospaced))
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                        if let station = player.currentStation {
+                            let query = (player.streamTitle ?? station.name)
+                                .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+                            Menu {
+                                Button("Spotify")     { openURL("https://open.spotify.com/search/\(query)") }
+                                Button("Apple Music") { openURL("https://music.apple.com/search?term=\(query)") }
+                                Button("Bandcamp")    { openURL("https://bandcamp.com/search?q=\(query)") }
+                                Button("YouTube")     { openURL("https://www.youtube.com/results?search_query=\(query)") }
+                            } label: {
+                                Image(systemName: "magnifyingglass")
+                                    .font(.system(size: 9))
+                                    .foregroundStyle(.tertiary)
+                            }
+                            .menuStyle(.borderlessButton)
+                            .menuIndicator(.hidden)
+                            .frame(width: 16, height: 16)
+                            .help("Find on music sites")
+                        }
+                    }
 
                     // Controls
                     HStack(spacing: 8) {
@@ -106,6 +129,11 @@ struct PlayerView: View {
         }
         .frame(height: 90)
         .background(playerBackground)
+    }
+
+    private func openURL(_ string: String) {
+        guard let url = URL(string: string) else { return }
+        NSWorkspace.shared.open(url)
     }
 
     private var playButtonIcon: String {
