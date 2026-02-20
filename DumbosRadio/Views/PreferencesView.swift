@@ -12,6 +12,9 @@ struct PreferencesView: View {
 
             ShortcutsPrefsView()
                 .tabItem { Label("Shortcuts", systemImage: "keyboard") }
+
+            VisualizerPrefsView()
+                .tabItem { Label("Visualizer", systemImage: "waveform") }
         }
         .frame(width: 400, height: 300)
         .padding()
@@ -103,5 +106,42 @@ struct ShortcutsPrefsView: View {
                 .font(.system(size: 12, design: .monospaced))
                 .foregroundStyle(.secondary)
         }
+    }
+}
+
+struct VisualizerPrefsView: View {
+    @EnvironmentObject var persistence: PersistenceManager
+
+    private var colorBinding: Binding<Color> {
+        Binding(
+            get: { persistence.visualizerSolidColor.color },
+            set: { persistence.visualizerSolidColor = StorableColor($0) }
+        )
+    }
+
+    var body: some View {
+        Form {
+            Section("Waveform Color") {
+                Picker("Color Mode", selection: $persistence.visualizerColorMode) {
+                    Text("Rainbow").tag("rainbow")
+                    Text("Solid Color").tag("solid")
+                }
+                .pickerStyle(.segmented)
+
+                if persistence.visualizerColorMode == "solid" {
+                    ColorPicker("Color", selection: colorBinding, supportsOpacity: false)
+                }
+            }
+
+            Section("Overlay Effects") {
+                Toggle("CRT (Scanlines, Vignette, Aberration)",
+                       isOn: $persistence.visualizerCRTEnabled)
+                Toggle("Glitch / Data Loss",
+                       isOn: $persistence.visualizerGlitchEnabled)
+                Toggle("Pixelated",
+                       isOn: $persistence.visualizerPixelatedEnabled)
+            }
+        }
+        .formStyle(.grouped)
     }
 }

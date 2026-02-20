@@ -14,7 +14,17 @@ struct PlayerView: View {
             // Visualizer behind everything — hidden when idle/stopped to avoid a flat line.
             // Loading shows the animated sine waves since there's no audio signal yet.
             if persistence.visualizerEnabled && player.isActive {
-                VisualizerView(player: player, isPlaying: true)
+                VisualizerView(
+                    player: player,
+                    isPlaying: true,
+                    settings: VisualizerSettings(
+                        colorMode:        persistence.visualizerColorMode,
+                        solidColor:       persistence.visualizerSolidColor,
+                        crtEnabled:       persistence.visualizerCRTEnabled,
+                        glitchEnabled:    persistence.visualizerGlitchEnabled,
+                        pixelatedEnabled: persistence.visualizerPixelatedEnabled
+                    )
+                )
             }
 
             // Player content

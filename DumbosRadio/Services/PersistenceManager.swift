@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import SwiftUI
 
 class PersistenceManager: ObservableObject {
     static let shared = PersistenceManager()
@@ -48,6 +49,23 @@ class PersistenceManager: ObservableObject {
         didSet { UserDefaults.standard.set(globalShortcutsEnabled, forKey: "globalShortcutsEnabled") }
     }
 
+    // MARK: - Visualizer Settings
+    @Published var visualizerColorMode: String = "rainbow" {
+        didSet { UserDefaults.standard.set(visualizerColorMode, forKey: "visualizerColorMode") }
+    }
+    @Published var visualizerSolidColor: StorableColor = .default {
+        didSet { save(visualizerSolidColor, forKey: "visualizerSolidColor") }
+    }
+    @Published var visualizerCRTEnabled: Bool = false {
+        didSet { UserDefaults.standard.set(visualizerCRTEnabled, forKey: "visualizerCRTEnabled") }
+    }
+    @Published var visualizerGlitchEnabled: Bool = false {
+        didSet { UserDefaults.standard.set(visualizerGlitchEnabled, forKey: "visualizerGlitchEnabled") }
+    }
+    @Published var visualizerPixelatedEnabled: Bool = false {
+        didSet { UserDefaults.standard.set(visualizerPixelatedEnabled, forKey: "visualizerPixelatedEnabled") }
+    }
+
     init() {
         load()
     }
@@ -65,6 +83,11 @@ class PersistenceManager: ObservableObject {
         launchAtLogin = ud.bool(forKey: "launchAtLogin")
         notificationsEnabled = ud.object(forKey: "notificationsEnabled") as? Bool ?? true
         globalShortcutsEnabled = ud.object(forKey: "globalShortcutsEnabled") as? Bool ?? true
+        visualizerColorMode = ud.string(forKey: "visualizerColorMode") ?? "rainbow"
+        visualizerSolidColor = loadObject(StorableColor.self, forKey: "visualizerSolidColor") ?? .default
+        visualizerCRTEnabled = ud.bool(forKey: "visualizerCRTEnabled")
+        visualizerGlitchEnabled = ud.bool(forKey: "visualizerGlitchEnabled")
+        visualizerPixelatedEnabled = ud.bool(forKey: "visualizerPixelatedEnabled")
     }
 
     // MARK: - Preset helpers

@@ -17,6 +17,7 @@
 		5C64C5FC860CC0B65BEDCC9C /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32D244A47C8830C09C735E15 /* UserNotifications.framework */; };
 		631AE5E27D92EE1B93DFC6E3 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76FD1628B656B54DB8BDD92D /* AVFoundation.framework */; };
 		77E4440D9251DA142309855B /* StationRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5726461EF622DD95A60AE66D /* StationRowView.swift */; };
+		7AE6FA142E31FCEFE4FDB24F /* StorableColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB464266F77285FCF5941908 /* StorableColor.swift */; };
 		7DF227BB325129F21FCF359D /* RadioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF55100D6E7CE687DB181F1D /* RadioPlayer.swift */; };
 		7E0F9D0342DAFECF73ED70DE /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5271FEA2E84E09FEA03670E8 /* MediaPlayer.framework */; };
 		81CC30E0AC251965E93B9D2B /* DumbosRadioApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09956C042F61E6C9DAB9C44A /* DumbosRadioApp.swift */; };
@@ -62,6 +63,7 @@
 		AF55100D6E7CE687DB181F1D /* RadioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioPlayer.swift; sourceTree = "<group>"; };
 		B73556213FE4FB69A042F2D0 /* Station.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Station.swift; sourceTree = "<group>"; };
 		BF453C333FE2F68320C42570 /* MediaToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaToolbox.framework; path = System/Library/Frameworks/MediaToolbox.framework; sourceTree = SDKROOT; };
+		CB464266F77285FCF5941908 /* StorableColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorableColor.swift; sourceTree = "<group>"; };
 		CC841C0EC9532DF4F118EB55 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		D618707B3F705ACE52424895 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
 		DB439A4BACEAD5D82F809A75 /* DumbosRadio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DumbosRadio.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -124,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				B73556213FE4FB69A042F2D0 /* Station.swift */,
+				CB464266F77285FCF5941908 /* StorableColor.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -260,6 +263,7 @@
 				94635CB85A7538F2EC0F87D9 /* StationBrowserView.swift in Sources */,
 				97B82853267AFBE218604962 /* StationListView.swift in Sources */,
 				77E4440D9251DA142309855B /* StationRowView.swift in Sources */,
+				7AE6FA142E31FCEFE4FDB24F /* StorableColor.swift in Sources */,
 				B816BFE4A8DCF82E6F720815 /* VisualizerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
