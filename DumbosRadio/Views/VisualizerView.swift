@@ -40,7 +40,7 @@ struct VisualizerView: View {
                         drawCRT(ctx: ctx, size: size)
                     }
                     if settings.glitchEnabled {
-                        drawGlitch(ctx: ctx, size: size, time: now, samples: samples)
+                        drawGlitch(ctx: ctx, size: size, time: now)
                     }
                 }
             }
@@ -189,53 +189,57 @@ struct VisualizerView: View {
         var y = 0.0
         while y < size.height {
             let line = Path(CGRect(x: 0, y: y, width: size.width, height: 1))
-            ctx.fill(line, with: .color(.black.opacity(0.25)))
+            ctx.fill(line, with: .color(.black.opacity(colorScheme == .dark ? 0.25 : 0.10)))
             y += 3
         }
     }
 
     // MARK: - Glitch Overlay
 
-    private func drawGlitch(ctx: GraphicsContext, size: CGSize, time: Double, samples: [Float]) {
-        let glitchCycle = (time * 2.3).truncatingRemainder(dividingBy: 1.0)
-        guard glitchCycle < 0.15 else { return }
+    private func drawGlitch(ctx: GraphicsContext, size: CGSize, time: Double) {
+        let barOpacity = colorScheme == .dark ? 0.18 : 0.10
 
-        let sliceCount = 6
-        let sliceH = size.height / Double(sliceCount)
-        let count = samples.count
-        guard count > 1 else { return }
+        // 1. Rolling sync bar — moves top→bottom continuously
+        let barH = size.height * 0.07
+        let barY = (time * 0.35 * size.height)
+                       .truncatingRemainder(dividingBy: size.height + barH) - barH
+        ctx.fill(
+            Path(CGRect(x: 0, y: barY, width: size.width, height: barH)),
+            with: .color(.white.opacity(barOpacity))
+        )
 
-        let midY   = size.height / 2
-        let maxAmp = size.height * 0.44
-
-        for i in 0..<sliceCount {
-            let seed = Double(i) * 137.508 + time * 31.41
-            let rand = (sin(seed) * 43758.5453).truncatingRemainder(dividingBy: 1.0)
-            guard abs(rand) > 0.45 else { continue }
-
-            let displacement = rand * size.width * 0.08
-            let sliceRect = CGRect(x: 0, y: Double(i) * sliceH, width: size.width, height: sliceH)
-
-            ctx.drawLayer { inner in
-                inner.clip(to: Path(sliceRect))
-                inner.translateBy(x: displacement, y: 0)
-
-                var path = Path()
-                for j in 0..<count {
-                    let x = size.width * Double(j) / Double(count - 1)
-                    let raw = max(-1.0, min(1.0, Double(samples[j]) * 3.0))
-                    let y = midY - maxAmp * raw
-                    j == 0 ? path.move(to: CGPoint(x: x, y: y)) : path.addLine(to: CGPoint(x: x, y: y))
-                }
-                inner.stroke(
-                    path,
-                    with: .color(waveColor(time: time, hueBase: 0, saturation: 0.7, opacity: 0.4)),
-                    style: StrokeStyle(lineWidth: 1.5, lineCap: .round)
+        // 2. Dense static noise in and just around the bar
+        let barTop = barY - 6
+        let barBot = barY + barH + 6
+        var row = barTop
+        while row <= barBot {
+            guard row >= 0 && row < size.height else { row += 1; continue }
+            let seed = row * 13.1 + time * 97.3
+            let r = (sin(seed) * 43758.5453).truncatingRemainder(dividingBy: 1.0)
+            if abs(r) > 0.35 {
+                ctx.fill(
+                    Path(CGRect(x: 0, y: row, width: size.width * abs(r) * 0.9, height: 1)),
+                    with: .color(.white.opacity(0.22 * abs(r)))
                 )
             }
+            row += 1
+        }
 
-            let stripe = Path(CGRect(x: 0, y: Double(i) * sliceH, width: size.width, height: 1))
-            ctx.fill(stripe, with: .color(.red.opacity(0.15 * abs(rand))))
+        // 3. Sparse scattered static lines across the whole frame (flicker ~15×/sec)
+        let slot = Int(time * 15)
+        var y = 0
+        while y < Int(size.height) {
+            let seed = Double(y &* 31 &+ slot &* 7919)
+            let r = (sin(seed * 0.017453) * 43758.5453).truncatingRemainder(dividingBy: 1.0)
+            if abs(r) > 0.78 {
+                let w = size.width * (0.04 + abs(r) * 0.35)
+                let x = size.width * ((r + 1) * 0.25)
+                ctx.fill(
+                    Path(CGRect(x: x, y: Double(y), width: w, height: 1)),
+                    with: .color(.white.opacity(0.10 * abs(r)))
+                )
+            }
+            y += 3
         }
     }
 }

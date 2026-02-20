@@ -121,6 +121,41 @@ class PersistenceManager: ObservableObject {
         }
     }
 
+    func removeStations(matching urls: Set<String>) {
+        stations.removeAll { urls.contains($0.url) }
+        for i in 0..<6 {
+            if let url = presets[i]?.url, urls.contains(url) {
+                setPreset(nil, at: i)
+            }
+        }
+    }
+
+    func removeAllStations() {
+        stations = []
+        presets = Array(repeating: nil, count: 6)
+    }
+
+    /// Returns the number of newly added stations.
+    @discardableResult
+    func importLibrary(data: LibraryExportData, replace: Bool) -> Int {
+        if replace {
+            stations = data.stations
+            presets = Array(data.presets.prefix(6)) + Array(repeating: nil, count: max(0, 6 - data.presets.count))
+            return data.stations.count
+        } else {
+            let newStations = data.stations.filter { !isInLibrary($0) }
+            stations.append(contentsOf: newStations)
+            var merged = presets
+            for i in 0..<min(data.presets.count, 6) {
+                if merged[i] == nil, let preset = data.presets[i] {
+                    merged[i] = preset
+                }
+            }
+            presets = merged
+            return newStations.count
+        }
+    }
+
     // MARK: - Private helpers
     private func save<T: Encodable>(_ value: T, forKey key: String) {
         if let data = try? JSONEncoder().encode(value) {

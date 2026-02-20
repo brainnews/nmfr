@@ -10,6 +10,7 @@
 		0547F2181DAD0C9B944F39E8 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4502C000B1FEB6F9DF2EAB53 /* PersistenceManager.swift */; };
 		082C9A44C468BF4361F23D98 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F02F30F3F9F8EFA01DF83EF /* PreferencesView.swift */; };
 		1B240E73A90EAD8889A90D2A /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D618707B3F705ACE52424895 /* MenuBarView.swift */; };
+		26E9367271E4FBB864634B92 /* LibraryExportData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C504A56D0EB0D16C53246DE /* LibraryExportData.swift */; };
 		2C7F3230D379F7DA9CFF6E22 /* AudioTapProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784CEC7FD49A60494C3FA760 /* AudioTapProcessor.swift */; };
 		3643C25E5287EF4CC1859CA2 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601C7B2133257A9C9735A260 /* SearchView.swift */; };
 		3F67CB9E0C5AD1DED1976869 /* PresetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC06BF0652A3A446C13F9A /* PresetsView.swift */; };
@@ -21,6 +22,7 @@
 		7DF227BB325129F21FCF359D /* RadioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF55100D6E7CE687DB181F1D /* RadioPlayer.swift */; };
 		7E0F9D0342DAFECF73ED70DE /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5271FEA2E84E09FEA03670E8 /* MediaPlayer.framework */; };
 		81CC30E0AC251965E93B9D2B /* DumbosRadioApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09956C042F61E6C9DAB9C44A /* DumbosRadioApp.swift */; };
+		85251374E489FE37E45080DD /* LibraryPrefsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71911DC8C8BF76A404E618C /* LibraryPrefsView.swift */; };
 		94635CB85A7538F2EC0F87D9 /* StationBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A87E3089E0FB2AED3BBDF57 /* StationBrowserView.swift */; };
 		97B82853267AFBE218604962 /* StationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA134E40F9CB0C05CD1170C6 /* StationListView.swift */; };
 		AD7B469309FE5A0368142287 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4551550294CEE61A4F1104E6 /* AppDelegate.swift */; };
@@ -40,6 +42,7 @@
 /* Begin PBXFileReference section */
 		09956C042F61E6C9DAB9C44A /* DumbosRadioApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DumbosRadioApp.swift; sourceTree = "<group>"; };
 		1233B6D481F15858C74A86D5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1C504A56D0EB0D16C53246DE /* LibraryExportData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryExportData.swift; sourceTree = "<group>"; };
 		2EBC06BF0652A3A446C13F9A /* PresetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetsView.swift; sourceTree = "<group>"; };
 		2F02F30F3F9F8EFA01DF83EF /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
 		32D244A47C8830C09C735E15 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
@@ -69,6 +72,7 @@
 		DB439A4BACEAD5D82F809A75 /* DumbosRadio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DumbosRadio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA134E40F9CB0C05CD1170C6 /* StationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationListView.swift; sourceTree = "<group>"; };
 		F6232A273A185F83E088F04F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		F71911DC8C8BF76A404E618C /* LibraryPrefsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPrefsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +112,7 @@
 		431A396DD2D0CF817E889664 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F71911DC8C8BF76A404E618C /* LibraryPrefsView.swift */,
 				D618707B3F705ACE52424895 /* MenuBarView.swift */,
 				CC841C0EC9532DF4F118EB55 /* PlayerView.swift */,
 				2F02F30F3F9F8EFA01DF83EF /* PreferencesView.swift */,
@@ -125,6 +130,7 @@
 		816E12CC27F26F571ED10214 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				1C504A56D0EB0D16C53246DE /* LibraryExportData.swift */,
 				B73556213FE4FB69A042F2D0 /* Station.swift */,
 				CB464266F77285FCF5941908 /* StorableColor.swift */,
 			);
@@ -248,6 +254,8 @@
 				2C7F3230D379F7DA9CFF6E22 /* AudioTapProcessor.swift in Sources */,
 				EFAEAD261511C4514A37E002 /* ContentView.swift in Sources */,
 				81CC30E0AC251965E93B9D2B /* DumbosRadioApp.swift in Sources */,
+				26E9367271E4FBB864634B92 /* LibraryExportData.swift in Sources */,
+				85251374E489FE37E45080DD /* LibraryPrefsView.swift in Sources */,
 				1B240E73A90EAD8889A90D2A /* MenuBarView.swift in Sources */,
 				F80895623CAC7C2B59E08B93 /* NotificationManager.swift in Sources */,
 				D2249B34CCE92A1B270D16C8 /* NowPlayingManager.swift in Sources */,

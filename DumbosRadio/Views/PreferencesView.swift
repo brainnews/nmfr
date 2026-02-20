@@ -15,6 +15,10 @@ struct PreferencesView: View {
 
             VisualizerPrefsView()
                 .tabItem { Label("Visualizer", systemImage: "waveform") }
+
+            LibraryPrefsView()
+                .environmentObject(persistence)
+                .tabItem { Label("Library", systemImage: "books.vertical") }
         }
         .frame(width: 400, height: 300)
         .padding()
@@ -134,12 +138,9 @@ struct VisualizerPrefsView: View {
             }
 
             Section("Overlay Effects") {
-                Toggle("CRT (Scanlines, Vignette, Aberration)",
-                       isOn: $persistence.visualizerCRTEnabled)
-                Toggle("Glitch / Data Loss",
-                       isOn: $persistence.visualizerGlitchEnabled)
-                Toggle("Pixelated",
-                       isOn: $persistence.visualizerPixelatedEnabled)
+                Toggle("CRT",    isOn: $persistence.visualizerCRTEnabled)
+                Toggle("Glitch", isOn: $persistence.visualizerGlitchEnabled)
+                Toggle("Pixel",  isOn: $persistence.visualizerPixelatedEnabled)
             }
         }
         .formStyle(.grouped)
