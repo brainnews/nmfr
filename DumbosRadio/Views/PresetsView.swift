@@ -72,11 +72,26 @@ struct PresetButton: View {
             .background(
                 RoundedRectangle(cornerRadius: 5)
                     .fill(fillColor)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 5)
-                            .stroke(strokeColor, lineWidth: isBuffering ? 1.5 : 1)
-                            .opacity(isBuffering ? (pulsing ? 0.9 : 0.2) : 1)
-                    )
+                    .overlay {
+                        if isBuffering {
+                            // Pulsing border — removed from hierarchy when done, which kills the animation
+                            RoundedRectangle(cornerRadius: 5)
+                                .stroke(Color.accentColor, lineWidth: 1.5)
+                                .opacity(pulsing ? 0.9 : 0.2)
+                                .onAppear {
+                                    withAnimation(.easeInOut(duration: 0.75).repeatForever(autoreverses: true)) {
+                                        pulsing = true
+                                    }
+                                }
+                                .onDisappear { pulsing = false }
+                        } else {
+                            RoundedRectangle(cornerRadius: 5)
+                                .stroke(
+                                    isActive ? Color.accentColor.opacity(0.5) : Color.white.opacity(0.1),
+                                    lineWidth: 1
+                                )
+                        }
+                    }
             )
         }
         .buttonStyle(PressScaleButtonStyle())
@@ -101,16 +116,6 @@ struct PresetButton: View {
                 }
             }
         }
-        .onAppear {
-            if isBuffering { startPulse() }
-        }
-        .onChange(of: isBuffering) { buffering in
-            if buffering {
-                startPulse()
-            } else {
-                withAnimation(.easeOut(duration: 0.3)) { pulsing = false }
-            }
-        }
     }
 
     // MARK: - Helpers
@@ -119,17 +124,6 @@ struct PresetButton: View {
         if isActive    { return Color.accentColor.opacity(0.15) }
         if isBuffering { return Color.accentColor.opacity(0.08) }
         return Color.white.opacity(0.05)
-    }
-
-    private var strokeColor: Color {
-        isActive || isBuffering ? Color.accentColor.opacity(0.5) : Color.white.opacity(0.1)
-    }
-
-    private func startPulse() {
-        pulsing = false
-        withAnimation(.easeInOut(duration: 0.75).repeatForever(autoreverses: true)) {
-            pulsing = true
-        }
     }
 
     private func activate() {
