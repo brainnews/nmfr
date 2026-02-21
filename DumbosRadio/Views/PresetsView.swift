@@ -45,7 +45,7 @@ struct PresetButton: View {
     let isBuffering: Bool
 
     @State private var showingContextMenu = false
-    @State private var snakeOffset: CGFloat = 0
+    @State private var snakeFraction: CGFloat = 0
 
     var body: some View {
         Button(action: { activate() }) {
@@ -74,32 +74,27 @@ struct PresetButton: View {
                     .fill(fillColor)
                     .overlay {
                         if isBuffering {
-                            // Snaking border — a single arc travels around the perimeter.
-                            // dashPhase displacement of exactly one perimeter makes the
-                            // loop boundary invisible, giving seamless continuous motion.
-                            GeometryReader { geo in
-                                let r: CGFloat = 5
-                                let perimeter = 2 * (geo.size.width  - 2 * r)
-                                             + 2 * (geo.size.height - 2 * r)
-                                             + 2 * .pi * r
-                                let segLen = perimeter * 0.28
-                                RoundedRectangle(cornerRadius: r)
-                                    .stroke(
-                                        Color.accentColor,
-                                        style: StrokeStyle(
-                                            lineWidth: 1.5,
-                                            lineCap: .round,
-                                            dash: [segLen, perimeter - segLen],
-                                            dashPhase: snakeOffset
-                                        )
-                                    )
-                                    .onAppear {
-                                        withAnimation(.linear(duration: 1.5).repeatForever(autoreverses: false)) {
-                                            snakeOffset = -perimeter
-                                        }
-                                    }
+                            // Snaking arc using trim fractions (0–1), no size measurement needed.
+                            // A second shape handles the wrap when the arc crosses the path origin.
+                            // Total visible length stays constant at 28% throughout the loop.
+                            let seg: CGFloat = 0.28
+                            let style = StrokeStyle(lineWidth: 1.5, lineCap: .round)
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 5)
+                                    .trim(from: snakeFraction,
+                                          to: min(1, snakeFraction + seg))
+                                    .stroke(Color.accentColor, style: style)
+                                RoundedRectangle(cornerRadius: 5)
+                                    .trim(from: 0,
+                                          to: max(0, snakeFraction + seg - 1))
+                                    .stroke(Color.accentColor, style: style)
                             }
-                            .onDisappear { snakeOffset = 0 }
+                            .onAppear {
+                                withAnimation(.linear(duration: 0.7).repeatForever(autoreverses: false)) {
+                                    snakeFraction = 1
+                                }
+                            }
+                            .onDisappear { withAnimation(nil) { snakeFraction = 0 } }
                         } else {
                             RoundedRectangle(cornerRadius: 5)
                                 .stroke(
