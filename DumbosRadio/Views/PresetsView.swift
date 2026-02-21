@@ -10,7 +10,8 @@ struct PresetsView: View {
                 PresetButton(
                     index: index,
                     station: persistence.presets[index],
-                    isActive: isActive(at: index)
+                    isActive: isActive(at: index),
+                    isBuffering: isBuffering(at: index)
                 )
                 .environmentObject(player)
                 .environmentObject(persistence)
@@ -26,6 +27,12 @@ struct PresetsView: View {
               let current = player.currentStation else { return false }
         return preset.url == current.url && player.state.isPlaying
     }
+
+    private func isBuffering(at index: Int) -> Bool {
+        guard let preset = persistence.presets[index],
+              let current = player.currentStation else { return false }
+        return preset.url == current.url && player.state.isLoading
+    }
 }
 
 struct PresetButton: View {
@@ -35,20 +42,22 @@ struct PresetButton: View {
     let index: Int
     let station: Station?
     let isActive: Bool
+    let isBuffering: Bool
 
     @State private var showingContextMenu = false
+    @State private var pulsing = false
 
     var body: some View {
         Button(action: { activate() }) {
             VStack(spacing: 1) {
                 Text("\(index + 1)")
                     .font(.system(size: 9, weight: .bold, design: .monospaced))
-                    .foregroundStyle(isActive ? Color.accentColor : .secondary)
+                    .foregroundStyle(isActive || isBuffering ? Color.accentColor : .secondary)
 
                 if let station {
                     Text(station.name)
                         .font(.system(size: 8, design: .default))
-                        .foregroundStyle(isActive ? Color.accentColor : .primary)
+                        .foregroundStyle(isActive || isBuffering ? Color.accentColor : .primary)
                         .lineLimit(1)
                         .truncationMode(.tail)
                 } else {
@@ -62,10 +71,11 @@ struct PresetButton: View {
             .padding(.horizontal, 3)
             .background(
                 RoundedRectangle(cornerRadius: 5)
-                    .fill(isActive ? Color.accentColor.opacity(0.15) : Color.white.opacity(0.05))
+                    .fill(fillColor)
                     .overlay(
                         RoundedRectangle(cornerRadius: 5)
-                            .stroke(isActive ? Color.accentColor.opacity(0.5) : Color.white.opacity(0.1), lineWidth: 1)
+                            .stroke(strokeColor, lineWidth: isBuffering ? 1.5 : 1)
+                            .opacity(isBuffering ? (pulsing ? 0.9 : 0.2) : 1)
                     )
             )
         }
@@ -90,6 +100,35 @@ struct PresetButton: View {
                     persistence.setPreset(nil, at: index)
                 }
             }
+        }
+        .onAppear {
+            if isBuffering { startPulse() }
+        }
+        .onChange(of: isBuffering) { buffering in
+            if buffering {
+                startPulse()
+            } else {
+                withAnimation(.easeOut(duration: 0.3)) { pulsing = false }
+            }
+        }
+    }
+
+    // MARK: - Helpers
+
+    private var fillColor: Color {
+        if isActive    { return Color.accentColor.opacity(0.15) }
+        if isBuffering { return Color.accentColor.opacity(0.08) }
+        return Color.white.opacity(0.05)
+    }
+
+    private var strokeColor: Color {
+        isActive || isBuffering ? Color.accentColor.opacity(0.5) : Color.white.opacity(0.1)
+    }
+
+    private func startPulse() {
+        pulsing = false
+        withAnimation(.easeInOut(duration: 0.75).repeatForever(autoreverses: true)) {
+            pulsing = true
         }
     }
 
