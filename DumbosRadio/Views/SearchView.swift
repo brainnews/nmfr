@@ -17,6 +17,10 @@ struct SearchView: View {
 
     @FocusState private var isFocused: Bool
 
+    // Stagger state for search results
+    @State private var visibleRows = 0
+    @State private var resultsVersion = 0
+
     var body: some View {
         VStack(spacing: 0) {
             // Search field
@@ -71,10 +75,12 @@ struct SearchView: View {
             } else if !results.isEmpty {
                 ScrollView {
                     LazyVStack(spacing: 2) {
-                        ForEach(results) { station in
+                        ForEach(Array(results.enumerated()), id: \.element.id) { index, station in
                             StationRowView(station: station, showSaveButton: true, showPresetButton: false)
                                 .environmentObject(player)
                                 .environmentObject(persistence)
+                                .opacity(index < visibleRows ? 1 : 0)
+                                .offset(y: index < visibleRows ? 0 : 5)
                         }
                     }
                     .padding(.vertical, 4)
@@ -123,6 +129,8 @@ struct SearchView: View {
                                 }
                             }
                             .padding(.vertical, 4)
+                            .opacity(topStations.isEmpty ? 0 : 1)
+                            .animation(.easeIn(duration: 0.3), value: topStations.isEmpty)
 
                             Text("Powered by radio-browser.info")
                                 .font(.system(size: 9))
@@ -159,7 +167,37 @@ struct SearchView: View {
         .onChange(of: isActive) { active in
             if active { isFocused = true }
         }
+        .onChange(of: results) { newResults in
+            animateResults(newResults)
+        }
     }
+
+    // MARK: - Results stagger animation
+
+    private func animateResults(_ newResults: [Station]) {
+        let v = resultsVersion + 1
+        resultsVersion = v
+        visibleRows = 0
+
+        guard !newResults.isEmpty else { return }
+
+        Task {
+            let limit = min(newResults.count, 25)
+            for i in 0..<limit {
+                try? await Task.sleep(for: .milliseconds(30))
+                guard resultsVersion == v else { return }
+                withAnimation(.easeOut(duration: 0.2)) {
+                    visibleRows = i + 1
+                }
+            }
+            // Reveal any remaining rows beyond the stagger limit instantly
+            if resultsVersion == v {
+                visibleRows = newResults.count
+            }
+        }
+    }
+
+    // MARK: - Search logic
 
     private func scheduleSearch(_ text: String) {
         searchTask?.cancel()

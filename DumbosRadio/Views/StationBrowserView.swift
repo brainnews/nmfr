@@ -10,25 +10,32 @@ struct StationBrowserView: View {
     @EnvironmentObject var persistence: PersistenceManager
 
     @State private var selectedTab: BrowserTab = .myStations
+    @Namespace private var tabNamespace
 
     var body: some View {
         VStack(spacing: 0) {
-            // Tab bar
+            // Tab bar — active background slides between tabs via matchedGeometryEffect
             HStack(spacing: 0) {
                 ForEach(BrowserTab.allCases, id: \.self) { tab in
-                    Button(action: { selectedTab = tab }) {
+                    Button(action: {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                            selectedTab = tab
+                        }
+                    }) {
                         Text(tab.rawValue)
                             .font(.system(size: 11, weight: selectedTab == tab ? .semibold : .regular))
                             .padding(.horizontal, 14)
                             .padding(.vertical, 7)
                             .foregroundStyle(selectedTab == tab ? Color.accentColor : .secondary)
+                            .animation(.easeInOut(duration: 0.2), value: selectedTab)
                     }
                     .buttonStyle(.plain)
-                    .background(
-                        selectedTab == tab
-                            ? Color.accentColor.opacity(0.1)
-                            : Color.clear
-                    )
+                    .background {
+                        if selectedTab == tab {
+                            Color.accentColor.opacity(0.1)
+                                .matchedGeometryEffect(id: "tabBG", in: tabNamespace)
+                        }
+                    }
                 }
                 Spacer()
             }

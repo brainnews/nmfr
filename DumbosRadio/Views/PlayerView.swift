@@ -40,13 +40,15 @@ struct PlayerView: View {
                         .foregroundStyle(.primary)
                         .lineLimit(1)
 
-                    // Meta — replaced by live stream title when available
+                    // Meta — crossfades when stream title changes
                     HStack(spacing: 6) {
                         Text(player.streamTitle ?? player.currentStation?.metaString ?? "Select a station to begin")
                             .font(.system(size: 10, design: .monospaced))
                             .foregroundStyle(.secondary)
                             .lineLimit(1)
                             .frame(maxWidth: .infinity, alignment: .leading)
+                            .contentTransition(.opacity)
+                            .animation(.easeInOut(duration: 0.35), value: player.streamTitle)
 
                         if let station = player.currentStation {
                             let query = (player.streamTitle ?? station.name)
@@ -70,14 +72,22 @@ struct PlayerView: View {
 
                     // Controls
                     HStack(spacing: 8) {
-                        // Play/Stop
+                        // Play/Stop — symbol morphs on macOS 14+
                         Button(action: { player.togglePlayStop() }) {
-                            Image(systemName: playButtonIcon)
-                                .font(.system(size: 16, weight: .medium))
-                                .frame(width: 28, height: 28)
+                            if #available(macOS 14.0, *) {
+                                Image(systemName: playButtonIcon)
+                                    .font(.system(size: 16, weight: .medium))
+                                    .frame(width: 28, height: 28)
+                                    .contentTransition(.symbolEffect(.replace))
+                            } else {
+                                Image(systemName: playButtonIcon)
+                                    .font(.system(size: 16, weight: .medium))
+                                    .frame(width: 28, height: 28)
+                            }
                         }
                         .buttonStyle(.plain)
                         .foregroundStyle(player.state.isPlaying ? Color.accentColor : .primary)
+                        .animation(.easeInOut(duration: 0.2), value: player.state.isPlaying)
                         .help(player.state.isPlaying ? "Stop" : "Play")
                         .disabled(player.currentStation == nil && !player.state.isPlaying)
 
@@ -117,11 +127,13 @@ struct PlayerView: View {
                         .frame(maxWidth: .infinity)
                     }
 
-                    // Status — always rendered to reserve space, invisible when nil
+                    // Status — slides up from below when it appears
                     Text(player.state.statusText ?? " ")
                         .font(.system(size: 9, design: .monospaced))
                         .foregroundStyle(Color.accentColor)
                         .opacity(player.state.statusText != nil ? 1 : 0)
+                        .offset(y: player.state.statusText != nil ? 0 : 4)
+                        .animation(.easeOut(duration: 0.25), value: player.state)
                 }
             }
             .padding(.horizontal, 14)

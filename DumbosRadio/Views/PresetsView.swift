@@ -69,7 +69,7 @@ struct PresetButton: View {
                     )
             )
         }
-        .buttonStyle(.plain)
+        .buttonStyle(PressScaleButtonStyle())
         .help(station.map { s in
             s.bitrate > 0 ? "\(s.name) · \(s.bitrate)kbps" : s.name
         } ?? "Empty — right-click to assign")
@@ -104,5 +104,13 @@ struct PresetButton: View {
 
     private func truncated(_ name: String, max: Int = 20) -> String {
         name.count > max ? String(name.prefix(max)) + "…" : name
+    }
+}
+
+private struct PressScaleButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.93 : 1.0)
+            .animation(.spring(response: 0.2, dampingFraction: 0.6), value: configuration.isPressed)
     }
 }
