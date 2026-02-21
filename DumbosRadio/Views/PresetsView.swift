@@ -45,7 +45,7 @@ struct PresetButton: View {
     let isBuffering: Bool
 
     @State private var showingContextMenu = false
-    @State private var pulsing = false
+    @State private var snakeOffset: CGFloat = 0
 
     var body: some View {
         Button(action: { activate() }) {
@@ -74,16 +74,32 @@ struct PresetButton: View {
                     .fill(fillColor)
                     .overlay {
                         if isBuffering {
-                            // Pulsing border — removed from hierarchy when done, which kills the animation
-                            RoundedRectangle(cornerRadius: 5)
-                                .stroke(Color.accentColor, lineWidth: 1.5)
-                                .opacity(pulsing ? 0.9 : 0.2)
-                                .onAppear {
-                                    withAnimation(.easeInOut(duration: 0.75).repeatForever(autoreverses: true)) {
-                                        pulsing = true
+                            // Snaking border — a single arc travels around the perimeter.
+                            // dashPhase displacement of exactly one perimeter makes the
+                            // loop boundary invisible, giving seamless continuous motion.
+                            GeometryReader { geo in
+                                let r: CGFloat = 5
+                                let perimeter = 2 * (geo.size.width  - 2 * r)
+                                             + 2 * (geo.size.height - 2 * r)
+                                             + 2 * .pi * r
+                                let segLen = perimeter * 0.28
+                                RoundedRectangle(cornerRadius: r)
+                                    .stroke(
+                                        Color.accentColor,
+                                        style: StrokeStyle(
+                                            lineWidth: 1.5,
+                                            lineCap: .round,
+                                            dash: [segLen, perimeter - segLen],
+                                            dashPhase: snakeOffset
+                                        )
+                                    )
+                                    .onAppear {
+                                        withAnimation(.linear(duration: 1.5).repeatForever(autoreverses: false)) {
+                                            snakeOffset = -perimeter
+                                        }
                                     }
-                                }
-                                .onDisappear { pulsing = false }
+                            }
+                            .onDisappear { snakeOffset = 0 }
                         } else {
                             RoundedRectangle(cornerRadius: 5)
                                 .stroke(
