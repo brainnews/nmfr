@@ -11,6 +11,7 @@ struct SearchView: View {
     @State private var isSearching = false
     @State private var error: String?
     @State private var searchTask: Task<Void, Never>?
+    @State private var searchGeneration = 0
 
     @State private var topStations: [Station] = []
     @State private var isLoadingTop = false
@@ -90,7 +91,16 @@ struct SearchView: View {
                         .foregroundStyle(.tertiary)
                         .padding(.bottom, 8)
                 }
-            } else if !query.isEmpty && !isSearching {
+            } else if isSearching {
+                VStack(spacing: 8) {
+                    ProgressView()
+                        .controlSize(.regular)
+                    Text("Searching…")
+                        .font(.system(size: 11))
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if !query.isEmpty {
                 VStack(spacing: 8) {
                     Image(systemName: "antenna.radiowaves.left.and.right.slash")
                         .font(.system(size: 24))
@@ -100,7 +110,7 @@ struct SearchView: View {
                         .foregroundStyle(.secondary)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else if query.isEmpty {
+            } else {
                 // Empty state: show trending stations once loaded
                 if isLoadingTop {
                     VStack(spacing: 8) {
@@ -155,6 +165,7 @@ struct SearchView: View {
                 }
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .task {
             guard topStations.isEmpty && !isLoadingTop else { return }
             isLoadingTop = true
@@ -201,6 +212,7 @@ struct SearchView: View {
 
     private func scheduleSearch(_ text: String) {
         searchTask?.cancel()
+        searchGeneration += 1
         guard !text.trimmingCharacters(in: .whitespaces).isEmpty else {
             results = []
             error = nil
@@ -208,35 +220,44 @@ struct SearchView: View {
             return
         }
 
+        // Mark as searching immediately so the loading state shows before the
+        // debounce fires — prevents "No results" flash on every keystroke.
+        isSearching = true
+        let gen = searchGeneration
         searchTask = Task {
             try? await Task.sleep(for: .milliseconds(400))
-            guard !Task.isCancelled else { return }
-            await performSearchAsync(text)
+            guard !Task.isCancelled, searchGeneration == gen else { return }
+            await performSearchAsync(text, generation: gen)
         }
     }
 
     private func performSearch() {
         searchTask?.cancel()
-        Task { await performSearchAsync(query) }
+        searchGeneration += 1
+        isSearching = true
+        let gen = searchGeneration
+        searchTask = Task { await performSearchAsync(query, generation: gen) }
     }
 
     @MainActor
-    private func performSearchAsync(_ text: String) async {
+    private func performSearchAsync(_ text: String, generation: Int) async {
         let trimmed = text.trimmingCharacters(in: .whitespaces)
         guard !trimmed.isEmpty else { return }
 
-        isSearching = true
         error = nil
 
         do {
-            results = try await RadioBrowserAPI.searchStations(query: trimmed)
+            let newResults = try await RadioBrowserAPI.searchStations(query: trimmed)
+            guard searchGeneration == generation else { return }
+            results = newResults
         } catch {
-            if !Task.isCancelled {
-                self.error = "Search failed: \(error.localizedDescription)"
-                results = []
-            }
+            guard searchGeneration == generation, !Task.isCancelled else { return }
+            self.error = "Search failed: \(error.localizedDescription)"
+            results = []
         }
 
-        isSearching = false
+        if searchGeneration == generation {
+            isSearching = false
+        }
     }
 }
