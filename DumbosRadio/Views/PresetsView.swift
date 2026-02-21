@@ -45,7 +45,7 @@ struct PresetButton: View {
     let isBuffering: Bool
 
     @State private var showingContextMenu = false
-    @State private var snakeFraction: CGFloat = 0
+    @State private var pulsing = false
 
     var body: some View {
         Button(action: { activate() }) {
@@ -74,27 +74,16 @@ struct PresetButton: View {
                     .fill(fillColor)
                     .overlay {
                         if isBuffering {
-                            // Snaking arc using trim fractions (0–1), no size measurement needed.
-                            // A second shape handles the wrap when the arc crosses the path origin.
-                            // Total visible length stays constant at 28% throughout the loop.
-                            let seg: CGFloat = 0.28
-                            let style = StrokeStyle(lineWidth: 1.5, lineCap: .round)
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 5)
-                                    .trim(from: snakeFraction,
-                                          to: min(1, snakeFraction + seg))
-                                    .stroke(Color.accentColor, style: style)
-                                RoundedRectangle(cornerRadius: 5)
-                                    .trim(from: 0,
-                                          to: max(0, snakeFraction + seg - 1))
-                                    .stroke(Color.accentColor, style: style)
-                            }
-                            .onAppear {
-                                withAnimation(.linear(duration: 0.7).repeatForever(autoreverses: false)) {
-                                    snakeFraction = 1
+                            // Pulsing border — removed from hierarchy when done, which kills the animation
+                            RoundedRectangle(cornerRadius: 5)
+                                .stroke(Color.accentColor, lineWidth: 1.5)
+                                .opacity(pulsing ? 0.9 : 0.2)
+                                .onAppear {
+                                    withAnimation(.easeInOut(duration: 0.75).repeatForever(autoreverses: true)) {
+                                        pulsing = true
+                                    }
                                 }
-                            }
-                            .onDisappear { withAnimation(nil) { snakeFraction = 0 } }
+                                .onDisappear { pulsing = false }
                         } else {
                             RoundedRectangle(cornerRadius: 5)
                                 .stroke(
