@@ -50,6 +50,7 @@ struct PresetButton: View {
     let isActive: Bool
     let isBuffering: Bool
 
+    @Environment(\.colorScheme) private var colorScheme
     @State private var hovering = false
     @GestureState private var isPressed = false
 
@@ -64,7 +65,7 @@ struct PresetButton: View {
 
                 Text("\(index + 1)")
                     .font(.system(size: 9, weight: .bold, design: .monospaced))
-                    .foregroundStyle((isActive || isBuffering) ? Color.primary : Color.secondary)
+                    .foregroundStyle(indexLabelColor)
 
                 if let station {
                     Text(station.name)
@@ -82,7 +83,7 @@ struct PresetButton: View {
             .padding(.vertical, 6)
             .padding(.horizontal, 6)
         }
-        .buttonStyle(TactileButtonStyle(isActive: isActive, isBuffering: isBuffering, hovering: hovering, isPressed: isPressed))
+        .buttonStyle(TactileButtonStyle(isActive: isActive, isBuffering: isBuffering, hovering: hovering, isPressed: isPressed, colorScheme: colorScheme))
         .simultaneousGesture(
             DragGesture(minimumDistance: 0)
                 .updating($isPressed) { _, state, _ in state = true }
@@ -113,6 +114,10 @@ struct PresetButton: View {
 
     // MARK: - Helpers
 
+    private var indexLabelColor: Color {
+        (isActive || isBuffering) ? .primary : .secondary
+    }
+
     private var ledColor: Color {
         if isActive    { return Color.accentColor }
         if isBuffering { return Color.accentColor.opacity(0.55) }
@@ -140,6 +145,7 @@ private struct TactileButtonStyle: ButtonStyle {
     let isBuffering: Bool
     let hovering: Bool
     let isPressed: Bool
+    let colorScheme: ColorScheme
 
     func makeBody(configuration: Configuration) -> some View {
         let p = isPressed
@@ -151,7 +157,7 @@ private struct TactileButtonStyle: ButtonStyle {
                     RoundedRectangle(cornerRadius: 6)
                         .fill(Color(NSColor.controlColor))
                     RoundedRectangle(cornerRadius: 6)
-                        .fill(Color.black.opacity(0.25))
+                        .fill(Color.black.opacity(colorScheme == .dark ? 0.25 : 0.08))
 
                     // Active accent wash
                     if isActive {

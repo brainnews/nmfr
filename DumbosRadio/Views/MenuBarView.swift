@@ -4,6 +4,10 @@ struct MenuBarView: View {
     @EnvironmentObject var player: RadioPlayer
     @EnvironmentObject var persistence: PersistenceManager
 
+    @State private var hoverPlay = false
+    @State private var hoverMute = false
+    @State private var hoveredPreset: Int? = nil
+
     var body: some View {
         VStack(spacing: 0) {
             // Mini player
@@ -14,14 +18,32 @@ struct MenuBarView: View {
                     Text(player.currentStation?.name ?? "Not My First Radio")
                         .font(.system(size: 12, weight: .semibold))
                         .lineLimit(1)
-                    Text(player.currentStation?.metaString ?? "No station playing")
+                    Text(player.streamTitle ?? player.currentStation?.metaString ?? "No station playing")
                         .font(.system(size: 10))
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
+                        .contentTransition(.opacity)
+                        .animation(.easeInOut(duration: 0.35), value: player.streamTitle)
                 }
 
                 Spacer()
 
+                // Mute
+                Button(action: {
+                    persistence.isMuted.toggle()
+                    player.applyVolume()
+                }) {
+                    Image(systemName: persistence.isMuted ? "speaker.slash.fill" : "speaker.wave.2.fill")
+                        .font(.system(size: 12))
+                        .frame(width: 26, height: 26)
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(.secondary)
+                .opacity(hoverMute ? 0.6 : 1)
+                .onHover { hoverMute = $0 }
+                .help(persistence.isMuted ? "Unmute" : "Mute")
+
+                // Play/Stop
                 Button(action: { player.togglePlayStop() }) {
                     Image(systemName: player.state.isPlaying ? "stop.fill" : "play.fill")
                         .font(.system(size: 14))
@@ -29,49 +51,26 @@ struct MenuBarView: View {
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(player.state.isPlaying ? Color.accentColor : .primary)
+                .opacity(hoverPlay ? 0.6 : 1)
+                .onHover { hoverPlay = $0 }
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 10)
 
-            // Volume
-            HStack(spacing: 8) {
-                Image(systemName: persistence.isMuted ? "speaker.slash" : "speaker.wave.1")
-                    .font(.system(size: 10))
-                    .foregroundStyle(.secondary)
-                    .onTapGesture {
-                        persistence.isMuted.toggle()
-                        player.applyVolume()
-                    }
-
-                Slider(value: Binding(
-                    get: { persistence.volume },
-                    set: { v in
-                        persistence.volume = v
-                        if v > 0 { persistence.isMuted = false }
-                        player.applyVolume()
-                    }
-                ), in: 0...1)
-                .controlSize(.mini)
-
-                Image(systemName: "speaker.wave.3")
-                    .font(.system(size: 10))
-                    .foregroundStyle(.secondary)
-            }
-            .padding(.horizontal, 12)
-            .padding(.bottom, 8)
-
             Divider()
 
             // Presets
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: 0) {
                 Text("PRESETS")
                     .font(.system(size: 9, weight: .semibold, design: .monospaced))
                     .foregroundStyle(.tertiary)
                     .padding(.horizontal, 12)
                     .padding(.top, 8)
+                    .padding(.bottom, 4)
 
                 ForEach(0..<6, id: \.self) { i in
                     if let station = persistence.presets[i] {
+                        let isActive = player.currentStation?.url == station.url && player.state.isPlaying
                         Button(action: { player.play(station) }) {
                             HStack {
                                 Text("\(i + 1)")
@@ -85,7 +84,7 @@ struct MenuBarView: View {
 
                                 Spacer()
 
-                                if player.currentStation?.url == station.url && player.state.isPlaying {
+                                if isActive {
                                     Image(systemName: "waveform")
                                         .font(.system(size: 9))
                                         .foregroundStyle(Color.accentColor)
@@ -93,13 +92,14 @@ struct MenuBarView: View {
                             }
                             .padding(.horizontal, 12)
                             .padding(.vertical, 5)
+                            .background(
+                                isActive
+                                    ? Color.accentColor.opacity(0.1)
+                                    : (hoveredPreset == i ? Color.primary.opacity(0.07) : Color.clear)
+                            )
                         }
                         .buttonStyle(.plain)
-                        .background(
-                            player.currentStation?.url == station.url && player.state.isPlaying
-                                ? Color.accentColor.opacity(0.1)
-                                : Color.clear
-                        )
+                        .onHover { hoveredPreset = $0 ? i : nil }
                     }
                 }
 
@@ -117,13 +117,10 @@ struct MenuBarView: View {
 
             // Footer
             HStack {
-                Button("Open Radio") {
-                    NSApp.activate(ignoringOtherApps: true)
-                    NSApp.windows.first { $0.isVisible && !($0 is NSPanel) }?.makeKeyAndOrderFront(nil)
-                }
-                .buttonStyle(.plain)
-                .font(.system(size: 11))
-                .foregroundStyle(.secondary)
+                Button("Open Radio") { openMainWindow() }
+                    .buttonStyle(.plain)
+                    .font(.system(size: 11))
+                    .foregroundStyle(.secondary)
 
                 Spacer()
 
@@ -136,5 +133,12 @@ struct MenuBarView: View {
             .padding(.vertical, 8)
         }
         .frame(width: 280)
+    }
+
+    private func openMainWindow() {
+        // Close the MenuBarExtra panel before activating the main window
+        NSApp.windows.first { $0 is NSPanel && $0.isVisible }?.close()
+        NSApp.activate(ignoringOtherApps: true)
+        NSApp.windows.first { $0.isVisible && !($0 is NSPanel) }?.makeKeyAndOrderFront(nil)
     }
 }
