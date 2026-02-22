@@ -6,6 +6,10 @@ struct PlayerView: View {
     @EnvironmentObject var persistence: PersistenceManager
     @Environment(\.colorScheme) private var colorScheme
 
+    @State private var hoverPlay = false
+    @State private var hoverMute = false
+    @State private var hoverViz  = false
+
     private var playerBackground: Color {
         colorScheme == .dark ? Color(white: 0.08) : Color(white: 0.88)
     }
@@ -77,19 +81,33 @@ struct PlayerView: View {
                             if #available(macOS 14.0, *) {
                                 Image(systemName: playButtonIcon)
                                     .font(.system(size: 16, weight: .medium))
-                                    .frame(width: 28, height: 28)
+                                    .frame(height: 26)
                                     .contentTransition(.symbolEffect(.replace))
                             } else {
                                 Image(systemName: playButtonIcon)
                                     .font(.system(size: 16, weight: .medium))
-                                    .frame(width: 28, height: 28)
+                                    .frame(height: 26)
                             }
                         }
                         .buttonStyle(.plain)
+                        .onHover { hoverPlay = $0 }
+                        .opacity(hoverPlay ? 0.6 : 1)
                         .foregroundStyle(player.state.isPlaying ? Color.accentColor : .primary)
                         .animation(.easeInOut(duration: 0.2), value: player.state.isPlaying)
                         .help(player.state.isPlaying ? "Stop" : "Play")
                         .disabled(player.currentStation == nil && !player.state.isPlaying)
+
+                        // Visualizer toggle
+                        Button(action: { persistence.visualizerEnabled.toggle() }) {
+                            Image(systemName: persistence.visualizerEnabled ? "waveform" : "waveform.slash")
+                                .font(.system(size: 12))
+                                .frame(height: 22)
+                        }
+                        .buttonStyle(.plain)
+                        .onHover { hoverViz = $0 }
+                        .opacity(hoverViz ? 0.6 : 1)
+                        .foregroundStyle(persistence.visualizerEnabled ? Color.accentColor : .secondary)
+                        .help(persistence.visualizerEnabled ? "Hide Visualizer" : "Show Visualizer")
 
                         // Mute
                         Button(action: {
@@ -98,21 +116,13 @@ struct PlayerView: View {
                         }) {
                             Image(systemName: persistence.isMuted ? "speaker.slash.fill" : "speaker.wave.2.fill")
                                 .font(.system(size: 12))
-                                .frame(width: 24, height: 24)
+                                .frame(height: 22)
                         }
                         .buttonStyle(.plain)
+                        .onHover { hoverMute = $0 }
+                        .opacity(hoverMute ? 0.6 : 1)
                         .foregroundStyle(.secondary)
                         .help(persistence.isMuted ? "Unmute" : "Mute")
-
-                        // Visualizer toggle
-                        Button(action: { persistence.visualizerEnabled.toggle() }) {
-                            Image(systemName: persistence.visualizerEnabled ? "waveform" : "waveform.slash")
-                                .font(.system(size: 12))
-                                .frame(width: 24, height: 24)
-                        }
-                        .buttonStyle(.plain)
-                        .foregroundStyle(persistence.visualizerEnabled ? Color.accentColor : .secondary)
-                        .help(persistence.visualizerEnabled ? "Hide Visualizer" : "Show Visualizer")
 
                         // Volume slider
                         Slider(value: Binding(
@@ -124,16 +134,19 @@ struct PlayerView: View {
                             }
                         ), in: 0...1)
                         .controlSize(.mini)
-                        .frame(maxWidth: .infinity)
-                    }
+                        .frame(maxWidth: 80)
 
-                    // Status — slides up from below when it appears
-                    Text(player.state.statusText ?? " ")
-                        .font(.system(size: 9, design: .monospaced))
-                        .foregroundStyle(Color.accentColor)
-                        .opacity(player.state.statusText != nil ? 1 : 0)
-                        .offset(y: player.state.statusText != nil ? 0 : 4)
-                        .animation(.easeOut(duration: 0.25), value: player.state)
+                        // Status — slides in from trailing edge when buffering/error
+                        if let status = player.state.statusText {
+                            Text(status)
+                                .font(.system(size: 9, design: .monospaced))
+                                .foregroundStyle(Color.accentColor)
+                                .lineLimit(1)
+                                .transition(.move(edge: .trailing).combined(with: .opacity))
+                        }
+                    }
+                    .animation(.easeOut(duration: 0.25), value: player.state)
+
                 }
             }
             .padding(.horizontal, 14)

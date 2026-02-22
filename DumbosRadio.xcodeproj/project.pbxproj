@@ -22,6 +22,7 @@
 		7DF227BB325129F21FCF359D /* RadioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF55100D6E7CE687DB181F1D /* RadioPlayer.swift */; };
 		7E0F9D0342DAFECF73ED70DE /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5271FEA2E84E09FEA03670E8 /* MediaPlayer.framework */; };
 		81CC30E0AC251965E93B9D2B /* DumbosRadioApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09956C042F61E6C9DAB9C44A /* DumbosRadioApp.swift */; };
+		84497E21FDB5EC20DF79193D /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F657C59D467AE2C903DD4AD2 /* AboutView.swift */; };
 		85251374E489FE37E45080DD /* LibraryPrefsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71911DC8C8BF76A404E618C /* LibraryPrefsView.swift */; };
 		94635CB85A7538F2EC0F87D9 /* StationBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A87E3089E0FB2AED3BBDF57 /* StationBrowserView.swift */; };
 		97B82853267AFBE218604962 /* StationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA134E40F9CB0C05CD1170C6 /* StationListView.swift */; };
@@ -72,6 +73,7 @@
 		DB439A4BACEAD5D82F809A75 /* DumbosRadio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DumbosRadio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA134E40F9CB0C05CD1170C6 /* StationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationListView.swift; sourceTree = "<group>"; };
 		F6232A273A185F83E088F04F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		F657C59D467AE2C903DD4AD2 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		F71911DC8C8BF76A404E618C /* LibraryPrefsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPrefsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -112,6 +114,7 @@
 		431A396DD2D0CF817E889664 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F657C59D467AE2C903DD4AD2 /* AboutView.swift */,
 				F71911DC8C8BF76A404E618C /* LibraryPrefsView.swift */,
 				D618707B3F705ACE52424895 /* MenuBarView.swift */,
 				CC841C0EC9532DF4F118EB55 /* PlayerView.swift */,
@@ -250,6 +253,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84497E21FDB5EC20DF79193D /* AboutView.swift in Sources */,
 				AD7B469309FE5A0368142287 /* AppDelegate.swift in Sources */,
 				2C7F3230D379F7DA9CFF6E22 /* AudioTapProcessor.swift in Sources */,
 				EFAEAD261511C4514A37E002 /* ContentView.swift in Sources */,

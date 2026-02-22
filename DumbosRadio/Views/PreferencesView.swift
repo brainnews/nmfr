@@ -20,7 +20,7 @@ struct PreferencesView: View {
                 .environmentObject(persistence)
                 .tabItem { Label("Library", systemImage: "books.vertical") }
         }
-        .frame(width: 400, height: 300)
+        .frame(width: 400, height: 370)
         .padding()
     }
 }
@@ -55,6 +55,14 @@ struct GeneralPrefsView: View {
                         .font(.system(size: 11))
                     Slider(value: $persistence.volume, in: 0...1)
                         .controlSize(.small)
+                }
+            }
+
+            Section("Support") {
+                HStack {
+                    Spacer()
+                    KoFiButton()
+                    Spacer()
                 }
             }
         }

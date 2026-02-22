@@ -28,6 +28,11 @@ struct NMFRApp: App {
         .windowStyle(.hiddenTitleBar)
         .windowResizability(.contentSize)
         .commands {
+            // Replace default About panel with custom window
+            CommandGroup(replacing: .appInfo) {
+                OpenAboutButton()
+            }
+
             // Remove default File > New
             CommandGroup(replacing: .newItem) {}
 
@@ -78,6 +83,13 @@ struct NMFRApp: App {
             PreferencesView()
                 .environmentObject(persistence)
         }
+
+        // About window
+        Window("About Not My First Radio", id: "about") {
+            AboutView()
+        }
+        .windowResizability(.contentSize)
+        .windowStyle(.hiddenTitleBar)
     }
 
     @ViewBuilder

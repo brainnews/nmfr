@@ -5,7 +5,7 @@ struct PresetsView: View {
     @EnvironmentObject var persistence: PersistenceManager
 
     var body: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: 5) {
             ForEach(0..<6, id: \.self) { index in
                 PresetButton(
                     index: index,
@@ -18,8 +18,14 @@ struct PresetsView: View {
             }
         }
         .padding(.horizontal, 10)
-        .padding(.vertical, 6)
+        .padding(.vertical, 7)
         .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
+        .overlay(alignment: .top) {
+            Rectangle().fill(Color.white.opacity(0.07)).frame(height: 1)
+        }
+        .overlay(alignment: .bottom) {
+            Rectangle().fill(Color.black.opacity(0.12)).frame(height: 1)
+        }
     }
 
     private func isActive(at index: Int) -> Bool {
@@ -44,20 +50,26 @@ struct PresetButton: View {
     let isActive: Bool
     let isBuffering: Bool
 
-    @State private var showingContextMenu = false
-    @State private var pulsing = false
+    @State private var hovering = false
+    @GestureState private var isPressed = false
 
     var body: some View {
         Button(action: { activate() }) {
-            VStack(spacing: 1) {
+            VStack(spacing: 3) {
+                // LED indicator dot
+                Circle()
+                    .fill(ledColor)
+                    .frame(width: 3.5, height: 3.5)
+                    .shadow(color: isActive ? Color.accentColor : .clear, radius: 3.5, x: 0, y: 0)
+
                 Text("\(index + 1)")
                     .font(.system(size: 9, weight: .bold, design: .monospaced))
-                    .foregroundStyle(isActive || isBuffering ? Color.accentColor : .secondary)
+                    .foregroundStyle((isActive || isBuffering) ? Color.primary : Color.secondary)
 
                 if let station {
                     Text(station.name)
                         .font(.system(size: 8, design: .default))
-                        .foregroundStyle(isActive || isBuffering ? Color.accentColor : .primary)
+                        .foregroundStyle(isActive ? .primary : (isBuffering ? .primary : .secondary))
                         .lineLimit(1)
                         .truncationMode(.tail)
                 } else {
@@ -67,34 +79,15 @@ struct PresetButton: View {
                 }
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 5)
-            .padding(.horizontal, 3)
-            .background(
-                RoundedRectangle(cornerRadius: 5)
-                    .fill(fillColor)
-                    .overlay {
-                        if isBuffering {
-                            // Pulsing border — removed from hierarchy when done, which kills the animation
-                            RoundedRectangle(cornerRadius: 5)
-                                .stroke(Color.accentColor, lineWidth: 1.5)
-                                .opacity(pulsing ? 0.9 : 0.2)
-                                .onAppear {
-                                    withAnimation(.easeInOut(duration: 0.75).repeatForever(autoreverses: true)) {
-                                        pulsing = true
-                                    }
-                                }
-                                .onDisappear { pulsing = false }
-                        } else {
-                            RoundedRectangle(cornerRadius: 5)
-                                .stroke(
-                                    isActive ? Color.accentColor.opacity(0.5) : Color.white.opacity(0.1),
-                                    lineWidth: 1
-                                )
-                        }
-                    }
-            )
+            .padding(.vertical, 6)
+            .padding(.horizontal, 6)
         }
-        .buttonStyle(PressScaleButtonStyle())
+        .buttonStyle(TactileButtonStyle(isActive: isActive, isBuffering: isBuffering, hovering: hovering, isPressed: isPressed))
+        .simultaneousGesture(
+            DragGesture(minimumDistance: 0)
+                .updating($isPressed) { _, state, _ in state = true }
+        )
+        .onHover { hovering = $0 }
         .help(station.map { s in
             s.bitrate > 0 ? "\(s.name) · \(s.bitrate)kbps" : s.name
         } ?? "Empty — right-click to assign")
@@ -120,10 +113,10 @@ struct PresetButton: View {
 
     // MARK: - Helpers
 
-    private var fillColor: Color {
-        if isActive    { return Color.accentColor.opacity(0.15) }
-        if isBuffering { return Color.accentColor.opacity(0.08) }
-        return Color.white.opacity(0.05)
+    private var ledColor: Color {
+        if isActive    { return Color.accentColor }
+        if isBuffering { return Color.accentColor.opacity(0.55) }
+        return Color.primary.opacity(0.15)
     }
 
     private func activate() {
@@ -140,10 +133,101 @@ struct PresetButton: View {
     }
 }
 
-private struct PressScaleButtonStyle: ButtonStyle {
+// MARK: - Tactile Button Style
+
+private struct TactileButtonStyle: ButtonStyle {
+    let isActive: Bool
+    let isBuffering: Bool
+    let hovering: Bool
+    let isPressed: Bool
+
     func makeBody(configuration: Configuration) -> some View {
+        let p = isPressed
+
         configuration.label
-            .scaleEffect(configuration.isPressed ? 0.93 : 1.0)
-            .animation(.spring(response: 0.2, dampingFraction: 0.6), value: configuration.isPressed)
+            .background(
+                ZStack {
+                    // Base fill — darkened for a more physical, remote-control feel
+                    RoundedRectangle(cornerRadius: 6)
+                        .fill(Color(NSColor.controlColor))
+                    RoundedRectangle(cornerRadius: 6)
+                        .fill(Color.black.opacity(0.25))
+
+                    // Active accent wash
+                    if isActive {
+                        RoundedRectangle(cornerRadius: 6)
+                            .fill(Color.accentColor.opacity(0.22))
+                    }
+
+                    // Lighting gradient — reverses on press to simulate physical depression
+                    RoundedRectangle(cornerRadius: 6)
+                        .fill(
+                            LinearGradient(
+                                stops: p ? [
+                                    .init(color: .black.opacity(0.14), location: 0),
+                                    .init(color: .clear, location: 0.45),
+                                    .init(color: .white.opacity(0.05), location: 1),
+                                ] : [
+                                    .init(color: .white.opacity(hovering ? 0.16 : 0.12), location: 0),
+                                    .init(color: .clear, location: 0.5),
+                                    .init(color: .black.opacity(0.15), location: 1),
+                                ],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
+                }
+            )
+            // Bevel border — light top / dark bottom, flips on press
+            .overlay(
+                RoundedRectangle(cornerRadius: 6)
+                    .strokeBorder(
+                        LinearGradient(
+                            colors: p
+                                ? [.black.opacity(0.55), .white.opacity(0.07)]
+                                : [.white.opacity(0.22), .black.opacity(0.5)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        ),
+                        lineWidth: 1
+                    )
+            )
+            // Buffering pulse border
+            .overlay(
+                Group {
+                    if isBuffering {
+                        BufferingBorderView(cornerRadius: 6)
+                    }
+                }
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 6))
+            // Drop shadow lifts away on press
+            .shadow(
+                color: p ? .black.opacity(0.08) : .black.opacity(0.38),
+                radius: p ? 0.5 : 3,
+                x: 0,
+                y: p ? 0 : 2
+            )
+            .scaleEffect(p ? 0.955 : 1.0)
+            .animation(.spring(response: 0.13, dampingFraction: 0.8), value: p)
+    }
+}
+
+// MARK: - Buffering border
+
+private struct BufferingBorderView: View {
+    let cornerRadius: CGFloat
+    @State private var pulsing = false
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: cornerRadius)
+            .strokeBorder(Color.accentColor, lineWidth: 1.5)
+            .opacity(pulsing ? 0.9 : 0.2)
+            .onAppear {
+                withAnimation(.easeInOut(duration: 0.75).repeatForever(autoreverses: true)) {
+                    pulsing = true
+                }
+            }
+            .onDisappear { pulsing = false }
     }
 }
