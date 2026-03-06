@@ -71,7 +71,7 @@ struct StationRowView: View {
                         }
                     }
                 } label: {
-                    Image(systemName: presetIndex != nil ? "star.fill" : "star")
+                    Image(systemName: presetIndex != nil ? "pin.fill" : "pin")
                         .font(.system(size: 11))
                         .frame(width: 24, height: 24)
                 }
@@ -116,7 +116,7 @@ struct StationRowView: View {
                     .help("Remove from Library")
                 }
             }
-            .opacity(hovering ? 1 : 0.6)
+            .opacity(hovering ? 1 : 0)
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 6)

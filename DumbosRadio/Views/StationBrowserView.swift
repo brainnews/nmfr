@@ -2,7 +2,8 @@ import SwiftUI
 
 enum BrowserTab: String, CaseIterable {
     case myStations = "My Stations"
-    case search = "Find Stations"
+    case search     = "Find Stations"
+    case browse     = "Browse"
 }
 
 struct StationBrowserView: View {
@@ -43,7 +44,7 @@ struct StationBrowserView: View {
 
             Divider()
 
-            // Both tabs stay in the hierarchy to preserve state (search results, scroll position)
+            // All tabs stay in the hierarchy to preserve state (search results, scroll position)
             ZStack {
                 StationListView()
                     .environmentObject(player)
@@ -56,6 +57,12 @@ struct StationBrowserView: View {
                     .environmentObject(persistence)
                     .opacity(selectedTab == .search ? 1 : 0)
                     .allowsHitTesting(selectedTab == .search)
+
+                BrowseView()
+                    .environmentObject(player)
+                    .environmentObject(persistence)
+                    .opacity(selectedTab == .browse ? 1 : 0)
+                    .allowsHitTesting(selectedTab == .browse)
             }
         }
     }

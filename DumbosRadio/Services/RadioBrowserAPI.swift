@@ -21,6 +21,42 @@ struct RadioBrowserAPI {
         return merged.sorted { $0.votes > $1.votes }
     }
 
+    static func fetchCountries() async throws -> [(name: String, count: Int)] {
+        let urlString = "\(baseURL)/countries?order=stationcount&reverse=true&hidebroken=true"
+        guard let url = URL(string: urlString) else { throw URLError(.badURL) }
+        var request = URLRequest(url: url)
+        request.setValue("NotMyFirstRadio/1.0", forHTTPHeaderField: "User-Agent")
+        request.timeoutInterval = 10
+        let (data, _) = try await URLSession.shared.data(for: request)
+        let decoded = try JSONDecoder().decode([RadioBrowserCategory].self, from: data)
+        return decoded.compactMap { item -> (name: String, count: Int)? in
+            guard !item.name.isEmpty, item.stationcount > 0 else { return nil }
+            return (name: item.name, count: item.stationcount)
+        }
+    }
+
+    static func fetchTags(limit: Int = 150) async throws -> [(name: String, count: Int)] {
+        let urlString = "\(baseURL)/tags?order=stationcount&reverse=true&hidebroken=true&limit=\(limit)"
+        guard let url = URL(string: urlString) else { throw URLError(.badURL) }
+        var request = URLRequest(url: url)
+        request.setValue("NotMyFirstRadio/1.0", forHTTPHeaderField: "User-Agent")
+        request.timeoutInterval = 10
+        let (data, _) = try await URLSession.shared.data(for: request)
+        let decoded = try JSONDecoder().decode([RadioBrowserCategory].self, from: data)
+        return decoded.compactMap { item -> (name: String, count: Int)? in
+            guard !item.name.isEmpty, item.stationcount > 0 else { return nil }
+            return (name: item.name, count: item.stationcount)
+        }
+    }
+
+    static func fetchStationsByCountry(_ country: String, limit: Int = 50) async throws -> [Station] {
+        try await fetchStations(path: "bycountryexact", query: country, limit: limit)
+    }
+
+    static func fetchStationsByTag(_ tag: String, limit: Int = 50) async throws -> [Station] {
+        try await fetchStations(path: "bytag", query: tag, limit: limit)
+    }
+
     static func fetchTopStations(limit: Int = 25) async throws -> [Station] {
         let urlString = "\(baseURL)/stations/topvote/\(limit)?hidebroken=true"
         guard let url = URL(string: urlString) else { throw URLError(.badURL) }
@@ -32,7 +68,9 @@ struct RadioBrowserAPI {
     }
 
     private static func fetchStations(path: String, query: String, limit: Int) async throws -> [Station] {
-        let encoded = query.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? query
+        var pathAllowed = CharacterSet.urlPathAllowed
+        pathAllowed.remove(charactersIn: "&+?#")
+        let encoded = query.addingPercentEncoding(withAllowedCharacters: pathAllowed) ?? query
         let urlString = "\(baseURL)/stations/\(path)/\(encoded)?limit=\(limit)&order=votes&reverse=true&hidebroken=true"
         guard let url = URL(string: urlString) else { throw URLError(.badURL) }
         var request = URLRequest(url: url)
@@ -43,7 +81,13 @@ struct RadioBrowserAPI {
     }
 }
 
-// MARK: - API Response Model
+// MARK: - API Response Models
+
+private struct RadioBrowserCategory: Decodable {
+    let name: String
+    let stationcount: Int
+}
+
 private struct RadioBrowserStation: Decodable {
     let name: String
     let urlResolved: String?

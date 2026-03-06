@@ -7,10 +7,12 @@ struct LibraryPrefsView: View {
     @State private var showImportOptions  = false
     @State private var showImportError    = false
     @State private var showImportResult   = false
+    @State private var showExportError    = false
     @State private var showRemoveAll      = false
     @State private var pendingImport: LibraryExportData? = nil
     @State private var importErrorMsg     = ""
     @State private var importResultMsg    = ""
+    @State private var exportErrorMsg     = ""
 
     var body: some View {
         Form {
@@ -46,6 +48,12 @@ struct LibraryPrefsView: View {
         } message: { data in
             let n = data.stations.count
             Text("The file contains \(n) station\(n == 1 ? "" : "s").\n\nMerge adds new stations without removing existing ones. Replace All wipes your current library and loads the file.")
+        }
+        // Export error
+        .alert("Export Failed", isPresented: $showExportError) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(exportErrorMsg)
         }
         // Import parse error
         .alert("Import Failed", isPresented: $showImportError) {
@@ -88,8 +96,8 @@ struct LibraryPrefsView: View {
             let encoded = try JSONEncoder().encode(data)
             try encoded.write(to: url)
         } catch {
-            importErrorMsg = "Export failed: \(error.localizedDescription)"
-            showImportError = true
+            exportErrorMsg = error.localizedDescription
+            showExportError = true
         }
     }
 

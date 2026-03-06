@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0547F2181DAD0C9B944F39E8 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4502C000B1FEB6F9DF2EAB53 /* PersistenceManager.swift */; };
+		06A6A5AD5DBBFBB780C54DC7 /* BrowseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E21EFBBB3CA7597E29C461 /* BrowseView.swift */; };
 		082C9A44C468BF4361F23D98 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F02F30F3F9F8EFA01DF83EF /* PreferencesView.swift */; };
 		1B240E73A90EAD8889A90D2A /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D618707B3F705ACE52424895 /* MenuBarView.swift */; };
 		26E9367271E4FBB864634B92 /* LibraryExportData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C504A56D0EB0D16C53246DE /* LibraryExportData.swift */; };
@@ -69,6 +70,7 @@
 		BF453C333FE2F68320C42570 /* MediaToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaToolbox.framework; path = System/Library/Frameworks/MediaToolbox.framework; sourceTree = SDKROOT; };
 		CB464266F77285FCF5941908 /* StorableColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorableColor.swift; sourceTree = "<group>"; };
 		CC841C0EC9532DF4F118EB55 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		D2E21EFBBB3CA7597E29C461 /* BrowseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseView.swift; sourceTree = "<group>"; };
 		D618707B3F705ACE52424895 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
 		DB439A4BACEAD5D82F809A75 /* DumbosRadio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DumbosRadio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA134E40F9CB0C05CD1170C6 /* StationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationListView.swift; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				F657C59D467AE2C903DD4AD2 /* AboutView.swift */,
+				D2E21EFBBB3CA7597E29C461 /* BrowseView.swift */,
 				F71911DC8C8BF76A404E618C /* LibraryPrefsView.swift */,
 				D618707B3F705ACE52424895 /* MenuBarView.swift */,
 				CC841C0EC9532DF4F118EB55 /* PlayerView.swift */,
@@ -256,6 +259,7 @@
 				84497E21FDB5EC20DF79193D /* AboutView.swift in Sources */,
 				AD7B469309FE5A0368142287 /* AppDelegate.swift in Sources */,
 				2C7F3230D379F7DA9CFF6E22 /* AudioTapProcessor.swift in Sources */,
+				06A6A5AD5DBBFBB780C54DC7 /* BrowseView.swift in Sources */,
 				EFAEAD261511C4514A37E002 /* ContentView.swift in Sources */,
 				81CC30E0AC251965E93B9D2B /* DumbosRadioApp.swift in Sources */,
 				26E9367271E4FBB864634B92 /* LibraryExportData.swift in Sources */,

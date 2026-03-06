@@ -8,9 +8,11 @@ class NowPlayingManager {
 
     private var currentStation: Station?
     private var artworkImage: NSImage?
+    private var lastIsPlaying = false
 
     func update(station: Station?, isPlaying: Bool) {
         currentStation = station
+        lastIsPlaying = isPlaying
         var info: [String: Any] = [:]
 
         if let station {
@@ -72,7 +74,7 @@ class NowPlayingManager {
                 await MainActor.run {
                     self.artworkImage = img
                     if self.currentStation?.url == station.url {
-                        self.update(station: station, isPlaying: true)
+                        self.update(station: station, isPlaying: self.lastIsPlaying)
                     }
                 }
             }
@@ -82,6 +84,7 @@ class NowPlayingManager {
     func clear() {
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
         MPNowPlayingInfoCenter.default().playbackState = .stopped
+        currentStation = nil
         artworkImage = nil
     }
 }

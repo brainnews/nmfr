@@ -192,6 +192,12 @@ struct SearchView: View {
 
         guard !newResults.isEmpty else { return }
 
+        // Single result (e.g. direct URL) — show immediately without stagger
+        if newResults.count == 1 {
+            visibleRows = 1
+            return
+        }
+
         Task {
             let limit = min(newResults.count, 25)
             for i in 0..<limit {
@@ -210,13 +216,36 @@ struct SearchView: View {
 
     // MARK: - Search logic
 
+    private func looksLikeStreamURL(_ text: String) -> Bool {
+        guard let url = URL(string: text),
+              let scheme = url.scheme,
+              scheme == "http" || scheme == "https",
+              url.host != nil else { return false }
+        return true
+    }
+
+    private func stationFromURL(_ urlString: String) -> Station {
+        let name = URL(string: urlString)?.host ?? urlString
+        return Station(id: UUID(), name: name, url: urlString,
+                       favicon: "", country: "", tags: "", bitrate: 0, votes: 0)
+    }
+
     private func scheduleSearch(_ text: String) {
         searchTask?.cancel()
         searchGeneration += 1
-        guard !text.trimmingCharacters(in: .whitespaces).isEmpty else {
+        let trimmed = text.trimmingCharacters(in: .whitespaces)
+        guard !trimmed.isEmpty else {
             results = []
             error = nil
             isSearching = false
+            return
+        }
+
+        // If it looks like a raw stream URL, show it immediately as a single result
+        if looksLikeStreamURL(trimmed) {
+            isSearching = false
+            error = nil
+            results = [stationFromURL(trimmed)]
             return
         }
 
@@ -232,11 +261,13 @@ struct SearchView: View {
     }
 
     private func performSearch() {
+        let trimmed = query.trimmingCharacters(in: .whitespaces)
+        if looksLikeStreamURL(trimmed) { return }
         searchTask?.cancel()
         searchGeneration += 1
         isSearching = true
         let gen = searchGeneration
-        searchTask = Task { await performSearchAsync(query, generation: gen) }
+        searchTask = Task { await performSearchAsync(trimmed, generation: gen) }
     }
 
     @MainActor
