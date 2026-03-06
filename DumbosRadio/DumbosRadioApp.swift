@@ -23,6 +23,7 @@ struct NMFRApp: App {
                 .onAppear {
                     setupNowPlaying()
                     restoreLastStation()
+                    GlobalShortcutManager.shared.setup(player: player, persistence: persistence)
                 }
         }
         .windowStyle(.hiddenTitleBar)

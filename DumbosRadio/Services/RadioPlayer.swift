@@ -1,5 +1,6 @@
 import AVFoundation
 import AppKit
+import Combine
 
 enum PlaybackState: Equatable {
     case idle
@@ -36,9 +37,13 @@ class RadioPlayer: ObservableObject {
     private var metadataDelegate: StreamMetadataDelegate?
 
     private let persistence: PersistenceManager
+    private var cancellables = Set<AnyCancellable>()
 
     init(persistence: PersistenceManager) {
         self.persistence = persistence
+        persistence.$eqSettings
+            .sink { [weak self] _ in self?.applyEQ() }
+            .store(in: &cancellables)
     }
 
     // MARK: - Visualizer data (read by Canvas on the main thread each frame — no @Published needed)
@@ -87,6 +92,8 @@ class RadioPlayer: ObservableObject {
             mix.inputParameters = [params]
             item.audioMix = mix
         }
+
+        applyEQ(to: tap)
 
         // Capture ICY / HLS stream title metadata (e.g. current song).
         let delegate = StreamMetadataDelegate { [weak self] title in
@@ -160,6 +167,19 @@ class RadioPlayer: ObservableObject {
         } else {
             stop()
         }
+    }
+
+    // MARK: - EQ
+
+    /// Called by the Combine subscription whenever eqSettings changes,
+    /// and immediately after creating a new tap in play().
+    func applyEQ(to tap: AudioTapProcessor? = nil) {
+        let target = tap ?? audioTap
+        guard let target else { return }
+        let settings = persistence.eqSettings
+        target.eqEnabled = settings.enabled
+        target.eqGains   = settings.gains
+        target.eqDirty   = true
     }
 
     func applyVolume() {

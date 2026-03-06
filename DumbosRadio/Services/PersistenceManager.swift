@@ -33,6 +33,9 @@ class PersistenceManager: ObservableObject {
     @Published var collapsed: Bool = false {
         didSet { UserDefaults.standard.set(collapsed, forKey: "collapsed") }
     }
+    @Published var tagStripVisible: Bool = true {
+        didSet { UserDefaults.standard.set(tagStripVisible, forKey: "tagStripVisible") }
+    }
     @Published var visualizerEnabled: Bool = true {
         didSet { UserDefaults.standard.set(visualizerEnabled, forKey: "visualizerEnabled") }
     }
@@ -66,6 +69,28 @@ class PersistenceManager: ObservableObject {
         didSet { UserDefaults.standard.set(visualizerPixelatedEnabled, forKey: "visualizerPixelatedEnabled") }
     }
 
+    // MARK: - Equalizer
+    @Published var eqSettings: EQSettings = EQSettings() {
+        didSet { save(eqSettings, forKey: "eqSettings") }
+    }
+
+    // MARK: - History
+    @Published var history: [HistoryEntry] = [] {
+        didSet { save(history, forKey: "history") }
+    }
+
+    func appendHistory(station: Station, trackTitle: String) {
+        if let last = history.first, last.trackTitle == trackTitle, last.station.url == station.url { return }
+        let entry = HistoryEntry(station: station, trackTitle: trackTitle, date: Date())
+        history.insert(entry, at: 0)
+        if history.count > 200 { history = Array(history.prefix(200)) }
+    }
+
+    func clearHistory() {
+        history = []
+        UserDefaults.standard.removeObject(forKey: "history")
+    }
+
     init() {
         load()
     }
@@ -78,6 +103,7 @@ class PersistenceManager: ObservableObject {
         volume = ud.object(forKey: "volume") as? Double ?? 0.8
         isMuted = ud.bool(forKey: "isMuted")
         collapsed = ud.bool(forKey: "collapsed")
+        tagStripVisible = ud.object(forKey: "tagStripVisible") as? Bool ?? true
         visualizerEnabled = ud.object(forKey: "visualizerEnabled") as? Bool ?? true
         menuBarMode = ud.bool(forKey: "menuBarMode")
         launchAtLogin = ud.bool(forKey: "launchAtLogin")
@@ -88,6 +114,8 @@ class PersistenceManager: ObservableObject {
         visualizerCRTEnabled = ud.bool(forKey: "visualizerCRTEnabled")
         visualizerGlitchEnabled = ud.bool(forKey: "visualizerGlitchEnabled")
         visualizerPixelatedEnabled = ud.bool(forKey: "visualizerPixelatedEnabled")
+        eqSettings = loadObject(EQSettings.self, forKey: "eqSettings") ?? EQSettings()
+        history = loadArray(HistoryEntry.self, forKey: "history") ?? []
     }
 
     // MARK: - Preset helpers

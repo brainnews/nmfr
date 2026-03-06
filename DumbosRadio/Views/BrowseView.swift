@@ -1,15 +1,11 @@
 import SwiftUI
 
-enum BrowseMode: String, CaseIterable {
-    case countries = "Countries"
-    case genres    = "Genres"
-}
-
 struct BrowseView: View {
     @EnvironmentObject var player: RadioPlayer
     @EnvironmentObject var persistence: PersistenceManager
 
-    @State private var mode: BrowseMode = .countries
+    var onBack: (() -> Void)? = nil
+
     @State private var filter: String = ""
     @State private var categories: [(name: String, count: Int)] = []
     @State private var isLoadingCategories = false
@@ -27,19 +23,18 @@ struct BrowseView: View {
     var body: some View {
         VStack(spacing: 0) {
             if let selected = selectedCategory {
-                // Station list for a selected country/genre
                 stationListHeader(for: selected)
                 Divider()
                 stationListBody
             } else {
-                // Category browser
                 categoryHeader
                 Divider()
                 categoryBody
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .task(id: mode) {
+        .task {
+            guard categories.isEmpty && !isLoadingCategories else { return }
             await loadCategories()
         }
     }
@@ -47,38 +42,34 @@ struct BrowseView: View {
     // MARK: - Category browser
 
     private var categoryHeader: some View {
-        VStack(spacing: 0) {
-            Picker("", selection: $mode) {
-                ForEach(BrowseMode.allCases, id: \.self) { m in
-                    Text(m.rawValue).tag(m)
+        HStack {
+            if let onBack {
+                Button(action: onBack) {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundStyle(.secondary)
                 }
+                .buttonStyle(.plain)
             }
-            .pickerStyle(.segmented)
-            .labelsHidden()
-            .padding(.horizontal, 10)
-            .padding(.vertical, 7)
-            .onChange(of: mode) { _ in filter = "" }
 
-            HStack {
-                Image(systemName: "line.3.horizontal.decrease.circle")
-                    .foregroundStyle(.secondary)
-                    .font(.system(size: 11))
-                TextField("Filter…", text: $filter)
-                    .textFieldStyle(.plain)
-                    .font(.system(size: 11))
-                if !filter.isEmpty {
-                    Button(action: { filter = "" }) {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundStyle(.secondary)
-                            .font(.system(size: 11))
-                    }
-                    .buttonStyle(.plain)
+            Image(systemName: "line.3.horizontal.decrease.circle")
+                .foregroundStyle(.secondary)
+                .font(.system(size: 11))
+            TextField("Filter countries…", text: $filter)
+                .textFieldStyle(.plain)
+                .font(.system(size: 11))
+            if !filter.isEmpty {
+                Button(action: { filter = "" }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.secondary)
+                        .font(.system(size: 11))
                 }
+                .buttonStyle(.plain)
             }
-            .padding(.horizontal, 10)
-            .padding(.vertical, 6)
-            .background(Color.white.opacity(0.05))
         }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 8)
+        .background(Color.white.opacity(0.05))
     }
 
     @ViewBuilder
@@ -86,13 +77,13 @@ struct BrowseView: View {
         if isLoadingCategories {
             VStack(spacing: 8) {
                 ProgressView().controlSize(.regular)
-                Text("Loading \(mode.rawValue.lowercased())…")
+                Text("Loading countries…")
                     .font(.system(size: 11))
                     .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else if filteredCategories.isEmpty {
-            Text(filter.isEmpty ? "No \(mode.rawValue.lowercased()) found" : "No matches")
+            Text(filter.isEmpty ? "No countries found" : "No matches")
                 .font(.system(size: 11))
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -100,11 +91,7 @@ struct BrowseView: View {
             ScrollView {
                 LazyVStack(spacing: 0) {
                     ForEach(filteredCategories, id: \.name) { item in
-                        CategoryRowView(
-                            name: item.name,
-                            count: item.count,
-                            mode: mode
-                        ) {
+                        CategoryRowView(name: item.name, count: item.count) {
                             selectCategory(item.name)
                         }
                     }
@@ -190,13 +177,7 @@ struct BrowseView: View {
     private func loadCategories() async {
         isLoadingCategories = true
         categories = []
-        do {
-            categories = try await (mode == .countries
-                ? RadioBrowserAPI.fetchCountries()
-                : RadioBrowserAPI.fetchTags())
-        } catch {
-            // silently leave categories empty
-        }
+        categories = (try? await RadioBrowserAPI.fetchCountries()) ?? []
         isLoadingCategories = false
     }
 
@@ -208,9 +189,7 @@ struct BrowseView: View {
 
         Task {
             do {
-                let fetched = try await (mode == .countries
-                    ? RadioBrowserAPI.fetchStationsByCountry(name)
-                    : RadioBrowserAPI.fetchStationsByTag(name))
+                let fetched = try await RadioBrowserAPI.fetchStationsByCountry(name)
                 stations = fetched.sorted { $0.votes > $1.votes }
             } catch {
                 stationError = "Could not load stations."
@@ -225,7 +204,6 @@ struct BrowseView: View {
 private struct CategoryRowView: View {
     let name: String
     let count: Int
-    let mode: BrowseMode
     let onTap: () -> Void
 
     @State private var hovering = false
@@ -233,11 +211,9 @@ private struct CategoryRowView: View {
     var body: some View {
         Button(action: onTap) {
             HStack {
-                if mode == .countries {
-                    Text(flagEmoji(for: name))
-                        .font(.system(size: 14))
-                        .frame(width: 22)
-                }
+                Text(flagEmoji(for: name))
+                    .font(.system(size: 14))
+                    .frame(width: 22)
 
                 Text(name.capitalized)
                     .font(.system(size: 11))
@@ -264,7 +240,6 @@ private struct CategoryRowView: View {
     }
 
     private func flagEmoji(for countryName: String) -> String {
-        // Convert country name to ISO code via Locale, then to flag emoji
         let lower = countryName.lowercased()
         let code: String? = Locale.isoRegionCodes.first { code in
             Locale(identifier: "en_US_POSIX").localizedString(forRegionCode: code)?.lowercased() == lower

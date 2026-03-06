@@ -63,6 +63,12 @@ struct ContentView: View {
         .onChange(of: player.state) { newState in
             handleStateChange(newState)
         }
+        .onChange(of: player.streamTitle) { title in
+            guard let title = title, !title.isEmpty,
+                  let station = player.currentStation,
+                  case .playing = player.state else { return }
+            persistence.appendHistory(station: station, trackTitle: title)
+        }
     }
 
     private func handleStateChange(_ state: PlaybackState) {

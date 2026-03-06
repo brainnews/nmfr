@@ -15,6 +15,7 @@ struct SearchView: View {
 
     @State private var topStations: [Station] = []
     @State private var isLoadingTop = false
+    @State private var showingCountries = false
 
     @FocusState private var isFocused: Bool
 
@@ -23,6 +24,21 @@ struct SearchView: View {
     @State private var resultsVersion = 0
 
     var body: some View {
+        ZStack {
+            searchContent
+                .opacity(showingCountries ? 0 : 1)
+                .allowsHitTesting(!showingCountries)
+
+            BrowseView(onBack: { withAnimation(.easeInOut(duration: 0.15)) { showingCountries = false } })
+                .environmentObject(player)
+                .environmentObject(persistence)
+                .opacity(showingCountries ? 1 : 0)
+                .allowsHitTesting(showingCountries)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+    }
+
+    private var searchContent: some View {
         VStack(spacing: 0) {
             // Search field
             HStack {
@@ -54,6 +70,14 @@ struct SearchView: View {
                         .controlSize(.small)
                         .scaleEffect(0.7)
                 }
+
+                Button(action: { withAnimation(.easeInOut(duration: 0.15)) { showingCountries = true } }) {
+                    Image(systemName: "globe")
+                        .font(.system(size: 12))
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
+                .help("Browse by country")
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 8)

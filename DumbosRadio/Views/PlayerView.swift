@@ -9,6 +9,8 @@ struct PlayerView: View {
     @State private var hoverPlay = false
     @State private var hoverMute = false
     @State private var hoverViz  = false
+    @State private var hoverEQ   = false
+    @State private var showEQ    = false
 
     private var playerBackground: Color {
         colorScheme == .dark ? Color(white: 0.08) : Color(white: 0.88)
@@ -96,6 +98,22 @@ struct PlayerView: View {
                         .animation(.easeInOut(duration: 0.2), value: player.state.isPlaying)
                         .help(player.state.isPlaying ? "Stop" : "Play")
                         .disabled(player.currentStation == nil && !player.state.isPlaying)
+
+                        // EQ
+                        Button(action: { showEQ.toggle() }) {
+                            Image(systemName: "slider.horizontal.3")
+                                .font(.system(size: 12))
+                                .frame(height: 22)
+                        }
+                        .buttonStyle(.plain)
+                        .onHover { hoverEQ = $0 }
+                        .opacity(hoverEQ ? 0.6 : 1)
+                        .foregroundStyle(persistence.eqSettings.enabled ? Color.accentColor : .secondary)
+                        .help("Equalizer")
+                        .popover(isPresented: $showEQ, arrowEdge: .bottom) {
+                            EQView()
+                                .environmentObject(persistence)
+                        }
 
                         // Visualizer toggle
                         Button(action: { persistence.visualizerEnabled.toggle() }) {

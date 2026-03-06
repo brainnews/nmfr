@@ -3,7 +3,7 @@ import SwiftUI
 enum BrowserTab: String, CaseIterable {
     case myStations = "My Stations"
     case search     = "Find Stations"
-    case browse     = "Browse"
+    case history    = "History"
 }
 
 struct StationBrowserView: View {
@@ -58,11 +58,11 @@ struct StationBrowserView: View {
                     .opacity(selectedTab == .search ? 1 : 0)
                     .allowsHitTesting(selectedTab == .search)
 
-                BrowseView()
+                HistoryView()
                     .environmentObject(player)
                     .environmentObject(persistence)
-                    .opacity(selectedTab == .browse ? 1 : 0)
-                    .allowsHitTesting(selectedTab == .browse)
+                    .opacity(selectedTab == .history ? 1 : 0)
+                    .allowsHitTesting(selectedTab == .history)
             }
         }
     }

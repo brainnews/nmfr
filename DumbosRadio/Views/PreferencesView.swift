@@ -11,6 +11,7 @@ struct PreferencesView: View {
                 .tabItem { Label("General", systemImage: "gear") }
 
             ShortcutsPrefsView()
+                .environmentObject(persistence)
                 .tabItem { Label("Shortcuts", systemImage: "keyboard") }
 
             VisualizerPrefsView()
@@ -85,35 +86,64 @@ struct GeneralPrefsView: View {
 }
 
 struct ShortcutsPrefsView: View {
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Keyboard Shortcuts")
-                .font(.headline)
+    @EnvironmentObject var persistence: PersistenceManager
+    @State private var axGranted = GlobalShortcutManager.shared.isAccessibilityGranted
 
-            Grid(alignment: .leading, horizontalSpacing: 20, verticalSpacing: 8) {
+    var body: some View {
+        Form {
+            Section("Global Shortcut") {
+                Toggle("Enable system-wide Play / Stop", isOn: $persistence.globalShortcutsEnabled)
+
+                if persistence.globalShortcutsEnabled {
+                    HStack {
+                        Text("Shortcut")
+                        Spacer()
+                        Text("⌃⌥⌘P")
+                            .font(.system(size: 12, design: .monospaced))
+                            .foregroundStyle(.secondary)
+                    }
+
+                    if axGranted {
+                        Label("Accessibility access granted — shortcut active", systemImage: "checkmark.circle.fill")
+                            .foregroundStyle(.green)
+                            .font(.system(size: 11))
+                    } else {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Label("Accessibility access required", systemImage: "exclamationmark.triangle.fill")
+                                .foregroundStyle(.orange)
+                                .font(.system(size: 11))
+                            Button("Open Accessibility Settings…") {
+                                GlobalShortcutManager.shared.openAccessibilitySettings()
+                            }
+                            .controlSize(.small)
+                        }
+                    }
+                }
+            }
+
+            Section("In-App Shortcuts") {
                 shortcutRow("Play / Stop", keys: "⌘⇧P")
-                shortcutRow("Preset 1–6", keys: "1 – 6")
-                shortcutRow("Mute", keys: "⌘⇧M")
+                shortcutRow("Mute / Unmute", keys: "⌘⇧M")
                 shortcutRow("Toggle Visualizer", keys: "⌘⇧V")
+                shortcutRow("Preset 1–6", keys: "⌘⇧1 – 6")
                 shortcutRow("Open Preferences", keys: "⌘,")
             }
-            .padding()
-            .background(Color.white.opacity(0.05))
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-
-            Text("Preset keys 1–6 work when the main window is focused.")
-                .font(.system(size: 10))
-                .foregroundStyle(.secondary)
-
-            Spacer()
         }
-        .padding()
+        .formStyle(.grouped)
+        .task {
+            // Poll until access is granted (or revoked) while this view is visible
+            while !Task.isCancelled {
+                axGranted = GlobalShortcutManager.shared.isAccessibilityGranted
+                try? await Task.sleep(for: .seconds(1))
+            }
+        }
     }
 
     private func shortcutRow(_ label: String, keys: String) -> some View {
-        GridRow {
+        HStack {
             Text(label)
                 .font(.system(size: 12))
+            Spacer()
             Text(keys)
                 .font(.system(size: 12, design: .monospaced))
                 .foregroundStyle(.secondary)
