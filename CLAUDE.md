@@ -9,7 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 xcodegen generate
 ```
 
-**Build release and install:**
+**Build release and install locally:**
 ```bash
 xcodebuild \
   -project DumbosRadio.xcodeproj \
@@ -18,13 +18,28 @@ xcodebuild \
   CONFIGURATION_BUILD_DIR="$(pwd)/build" \
   build
 
-# Re-sign with --deep to fix Sparkle framework Team ID mismatch (ad-hoc only)
+# Re-sign with --deep after build (fixes Sparkle framework Team ID mismatch for ad-hoc signing)
 codesign --force --deep --sign - "build/Not My First Radio.app"
 
+# Use ditto, not cp -r — Sparkle.framework contains symlinks cp can't handle
 rm -rf "/Applications/Not My First Radio.app" && ditto "build/Not My First Radio.app" "/Applications/Not My First Radio.app"
 ```
 
-**Build DMG for distribution (run after the release build above):**
+**Debug build** (faster, for testing):
+```bash
+xcodebuild -project DumbosRadio.xcodeproj -scheme DumbosRadio -configuration Debug build
+```
+
+If `xcodebuild` fails with "requires Xcode", fix with:
+```bash
+sudo xcode-select -s /Applications/Xcode-beta.app/Contents/Developer
+```
+
+There are no tests and no linter configured.
+
+## Releasing
+
+**Build DMG for distribution** (run after the release build above):
 ```bash
 VERSION=1.x  # set this
 
@@ -40,27 +55,18 @@ create-dmg \
   "build/NotMyFirstRadio-${VERSION}.dmg" \
   "build/Not My First Radio.app"
 
-# Sign the DMG
 codesign --force --sign - "build/NotMyFirstRadio-${VERSION}.dmg"
 
-# Get the Sparkle signature (paste edSignature + length into appcast.xml)
-~/Library/Developer/Xcode/DerivedData/DumbosRadio-ggbalfgxoyuszwbbwgdznrnisqns/SourcePackages/artifacts/sparkle/Sparkle/bin/sign_update "build/NotMyFirstRadio-${VERSION}.dmg"
+# Outputs edSignature + length — paste both into appcast.xml enclosure
+SPARKLE_BIN=$(find ~/Library/Developer/Xcode/DerivedData -path "*/sparkle/Sparkle/bin/sign_update" 2>/dev/null | head -1)
+"$SPARKLE_BIN" "build/NotMyFirstRadio-${VERSION}.dmg"
 
-# Upload to GitHub release
 gh release upload "v${VERSION}" "build/NotMyFirstRadio-${VERSION}.dmg" --repo brainnews/nmfr --clobber
 ```
 
-**Debug build** (faster, for testing):
-```bash
-xcodebuild -project DumbosRadio.xcodeproj -scheme DumbosRadio -configuration Debug build
-```
+**`appcast.xml`** must be updated and pushed to `main` for Sparkle to detect the new version. The `SUFeedURL` is `https://raw.githubusercontent.com/brainnews/nmfr/main/appcast.xml`. The EdDSA private key is stored in Keychain under "Sparkle Key" — don't lose it.
 
-If `xcodebuild` fails with "requires Xcode", fix with:
-```bash
-sudo xcode-select -s /Applications/Xcode-beta.app/Contents/Developer
-```
-
-There are no tests and no linter configured.
+**`project.yml` owns `Info.plist`** — xcodegen regenerates it on every run. Always set `CFBundleShortVersionString` and `CFBundleVersion` in `project.yml`'s `info.properties` block, not directly in `Info.plist`.
 
 ## Architecture
 
@@ -88,6 +94,12 @@ Two `@MainActor ObservableObject`s are injected at the root as `@EnvironmentObje
 
 This is intentional: waveform data is **not `@Published`**. Publishing it would fire `objectWillChange` 30×/sec and cause every view in the tree to re-render. The Canvas reads the values as plain properties on a reference type — SwiftUI doesn't observe them, but `TimelineView` drives the redraw anyway.
 
+### Auto-update (Sparkle)
+
+`SPUStandardUpdaterController` is held as a stored property on `NMFRApp` and started on init. It checks `appcast.xml` on launch automatically. "Check for Updates…" in the app menu and About window both use `NSApp.sendAction(#selector(SPUStandardUpdaterController.checkForUpdates(_:)), to: nil, from: nil)` — this travels the responder chain to reach the controller without needing a direct reference.
+
+Sparkle ships pre-signed with Apple's Team ID. Because the app uses ad-hoc signing, the `codesign --force --deep --sign -` step after build is required to re-sign Sparkle's embedded framework, XPC services, and Updater.app with a consistent identity. Skipping this causes a "damaged" Gatekeeper error on downloaded builds.
+
 ### Country display
 
 `Station.country` stores raw API data which may be a full English name ("The United Kingdom...") from old saved data or a 2-letter ISO code from the current API. `Station.countryCode` (computed, with a static reverse-mapping cache built from `Locale`) normalises both to the ISO code for display. Always use `countryCode` in UI, not `country` directly.
@@ -99,5 +111,5 @@ This is intentional: waveform data is **not `@Published`**. Publishing it would 
 ### Key constraints
 
 - `SWIFT_STRICT_CONCURRENCY: minimal` — concurrency warnings are suppressed. The audio tap callback has a benign data race with the main thread reading `latestWaveform`; this is intentional and safe on ARM64.
-- App sandbox is enabled; only `network.client` and `files.user-selected.read-only` entitlements are granted.
+- App sandbox is enabled; entitlements: `network.client`, `files.user-selected.read-write`, and Sparkle's mach-lookup temporary exceptions (`com.miles.NotMyFirstRadio-spks` / `-spki`).
 - Deployment target is macOS 13.0. Any API newer than 13.0 needs `#available` guards.
