@@ -51,13 +51,6 @@ targets:
       - sdk: UserNotifications.framework
       - package: Sparkle
         product: Sparkle
-    postBuildScripts:
-      - name: Re-sign Frameworks (ad-hoc)
-        script: |
-          find "${CODESIGNING_FOLDER_PATH}/Contents/Frameworks" -name "*.framework" -o -name "*.xpc" | while read f; do
-            codesign --force --sign "${CODE_SIGN_IDENTITY}" "$f"
-          done
-        basedOnDependencyAnalysis: false
     info:
       path: DumbosRadio/Info.plist
       properties:

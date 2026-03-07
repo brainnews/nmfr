@@ -18,6 +18,9 @@ xcodebuild \
   CONFIGURATION_BUILD_DIR="$(pwd)/build" \
   build
 
+# Re-sign with --deep to fix Sparkle framework Team ID mismatch (ad-hoc only)
+codesign --force --deep --sign - "build/Not My First Radio.app"
+
 rm -rf "/Applications/Not My First Radio.app" && ditto "build/Not My First Radio.app" "/Applications/Not My First Radio.app"
 ```
 
