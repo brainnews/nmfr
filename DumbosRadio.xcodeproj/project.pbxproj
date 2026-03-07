@@ -212,6 +212,7 @@
 				D3CDCF39D7C885F9EF72C51F /* Sources */,
 				465B4D0C817C628ADDA304D4 /* Resources */,
 				2EC57271193F639E23AAD0D3 /* Frameworks */,
+				3B9C07EF34D33D739C842599 /* Re-sign Frameworks (ad-hoc) */,
 			);
 			buildRules = (
 			);
@@ -271,6 +272,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3B9C07EF34D33D739C842599 /* Re-sign Frameworks (ad-hoc) */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Re-sign Frameworks (ad-hoc)";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "find \"${CODESIGNING_FOLDER_PATH}/Contents/Frameworks\" -name \"*.framework\" -o -name \"*.xpc\" | while read f; do\n  codesign --force --sign \"${CODE_SIGN_IDENTITY}\" \"$f\"\ndone\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D3CDCF39D7C885F9EF72C51F /* Sources */ = {
