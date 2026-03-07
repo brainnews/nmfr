@@ -18,7 +18,7 @@ xcodebuild \
   CONFIGURATION_BUILD_DIR="$(pwd)/build" \
   build
 
-cp -r "build/Not My First Radio.app" /Applications/
+rm -rf "/Applications/Not My First Radio.app" && ditto "build/Not My First Radio.app" "/Applications/Not My First Radio.app"
 ```
 
 **Debug build** (faster, for testing):
