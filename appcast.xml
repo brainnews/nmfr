@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
+    <channel>
+        <title>Not My First Radio</title>
+        <link>https://github.com/brainnews/nmfr/releases</link>
+        <description>Most recent release of Not My First Radio</description>
+        <language>en</language>
+
+        <item>
+            <title>Version 1.2</title>
+            <sparkle:version>1.2</sparkle:version>
+            <sparkle:shortVersionString>1.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <pubDate>Thu, 06 Mar 2026 00:00:00 +0000</pubDate>
+            <enclosure
+                url="https://github.com/brainnews/nmfr/releases/download/v1.2/NotMyFirstRadio-1.2.zip"
+                length="2309481"
+                type="application/octet-stream"
+                sparkle:edSignature="tf/vb59ckVrz/bCcvx5vEpbqdVabOB9H2P0yuznLY5G8gcEOTEVQrry5nWx4CLtw6OrXIXX6E/KL8GmZoh2zDQ=="
+            />
+        </item>
+
+        <!-- For future releases, add new <item> blocks above this line. -->
+        <!-- Sign with: bin/sign_update "NotMyFirstRadio-X.X.zip" -->
+    </channel>
+</rss>

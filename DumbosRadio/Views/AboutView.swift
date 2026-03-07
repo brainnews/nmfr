@@ -1,5 +1,6 @@
 import SwiftUI
 import AppKit
+import Sparkle
 
 struct AboutView: View {
     private var appVersion: String {
@@ -18,6 +19,14 @@ struct AboutView: View {
             Text("Version \(appVersion)")
                 .font(.system(size: 11))
                 .foregroundStyle(.secondary)
+
+            Button("Check for Updates…") {
+                NSApp.sendAction(
+                    #selector(SPUStandardUpdaterController.checkForUpdates(_:)),
+                    to: nil, from: nil)
+            }
+            .font(.system(size: 11))
+            .buttonStyle(.link)
 
             Link("Developed by Dumbsoft", destination: URL(string: "https://dumbsoft.com")!)
                 .font(.system(size: 11))

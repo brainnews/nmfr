@@ -1,10 +1,13 @@
 import SwiftUI
+import Sparkle
 
 @main
 struct NMFRApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     @StateObject private var persistence = PersistenceManager.shared
+    private let updaterController = SPUStandardUpdaterController(
+        startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
 
     // Lazily create RadioPlayer with shared persistence
     @StateObject private var player: RadioPlayer
@@ -32,6 +35,11 @@ struct NMFRApp: App {
             // Replace default About panel with custom window
             CommandGroup(replacing: .appInfo) {
                 OpenAboutButton()
+                Button("Check for Updates…") {
+                    NSApp.sendAction(
+                        #selector(SPUStandardUpdaterController.checkForUpdates(_:)),
+                        to: nil, from: nil)
+                }
             }
 
             // Remove default File > New
