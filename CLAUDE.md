@@ -24,6 +24,32 @@ codesign --force --deep --sign - "build/Not My First Radio.app"
 rm -rf "/Applications/Not My First Radio.app" && ditto "build/Not My First Radio.app" "/Applications/Not My First Radio.app"
 ```
 
+**Build DMG for distribution (run after the release build above):**
+```bash
+VERSION=1.x  # set this
+
+create-dmg \
+  --volname "Not My First Radio" \
+  --volicon "DumbosRadio/Assets.xcassets/AppIcon.appiconset/icon_512.png" \
+  --window-pos 200 120 \
+  --window-size 540 380 \
+  --icon-size 128 \
+  --icon "Not My First Radio.app" 140 190 \
+  --hide-extension "Not My First Radio.app" \
+  --app-drop-link 400 190 \
+  "build/NotMyFirstRadio-${VERSION}.dmg" \
+  "build/Not My First Radio.app"
+
+# Sign the DMG
+codesign --force --sign - "build/NotMyFirstRadio-${VERSION}.dmg"
+
+# Get the Sparkle signature (paste edSignature + length into appcast.xml)
+~/Library/Developer/Xcode/DerivedData/DumbosRadio-ggbalfgxoyuszwbbwgdznrnisqns/SourcePackages/artifacts/sparkle/Sparkle/bin/sign_update "build/NotMyFirstRadio-${VERSION}.dmg"
+
+# Upload to GitHub release
+gh release upload "v${VERSION}" "build/NotMyFirstRadio-${VERSION}.dmg" --repo brainnews/nmfr --clobber
+```
+
 **Debug build** (faster, for testing):
 ```bash
 xcodebuild -project DumbosRadio.xcodeproj -scheme DumbosRadio -configuration Debug build

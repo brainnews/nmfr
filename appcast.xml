@@ -13,10 +13,10 @@
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
             <pubDate>Thu, 06 Mar 2026 00:00:00 +0000</pubDate>
             <enclosure
-                url="https://github.com/brainnews/nmfr/releases/download/v1.2/NotMyFirstRadio-1.2.zip"
-                length="2308562"
-                type="application/octet-stream"
-                sparkle:edSignature="DpHMzCn1TusJRbTKbGWhfVsGj4gUPUsax+a6+h5d18HpbQAEHMkwApqT5CO4tG8Ro6vBZ2hYt2gLEfI86UYGCw=="
+                url="https://github.com/brainnews/nmfr/releases/download/v1.2/NotMyFirstRadio-1.2.dmg"
+                length="2181269"
+                type="application/x-apple-diskimage"
+                sparkle:edSignature="aagZUHj0XQLzkjbXgNd2v0d9pnOBSwaFluPJzqblkJ7DG+PQbhgt6ocpnVcnKbw3HIIPWzpsDI9nD6F+fSZWCw=="
             />
         </item>
 
