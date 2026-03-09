@@ -64,9 +64,15 @@ struct PlayerView: View {
                                 .font(.system(size: 8))
                                 .foregroundStyle(Color.accentColor.opacity(0.7))
                         } else if player.isShazamMatching {
-                            Image(systemName: "waveform.badge.magnifyingglass")
-                                .font(.system(size: 8))
-                                .foregroundStyle(Color.secondary.opacity(0.5))
+                            if #available(macOS 14.0, *) {
+                                Image(systemName: "shazam.logo")
+                                    .font(.system(size: 8))
+                                    .foregroundStyle(Color.secondary.opacity(0.5))
+                            } else {
+                                Image(systemName: "waveform.badge.magnifyingglass")
+                                    .font(.system(size: 8))
+                                    .foregroundStyle(Color.secondary.opacity(0.5))
+                            }
                         }
 
                         Text(displayText)
