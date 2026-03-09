@@ -66,6 +66,8 @@ gh release upload "v${VERSION}" "build/NotMyFirstRadio-${VERSION}.dmg" --repo br
 
 **`appcast.xml`** must be updated and pushed to `main` for Sparkle to detect the new version. The `SUFeedURL` is `https://raw.githubusercontent.com/brainnews/nmfr/main/appcast.xml`. The EdDSA private key is stored in Keychain under "Sparkle Key" — don't lose it.
 
+**Critical:** In `appcast.xml`, `sparkle:version` must be the **`CFBundleVersion` integer** (e.g. `6`), not the marketing version string (e.g. `1.5`). Sparkle compares this against the installed app's `CFBundleVersion` to decide if an update is available. Using the marketing version string causes Sparkle to think the installed build number (e.g. `5`) is newer than the appcast version (e.g. `1.5`).
+
 **`project.yml` owns `Info.plist`** — xcodegen regenerates it on every run. Always set `CFBundleShortVersionString` and `CFBundleVersion` in `project.yml`'s `info.properties` block, not directly in `Info.plist`.
 
 ## Architecture
