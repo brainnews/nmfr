@@ -25,6 +25,16 @@ final class AudioTapProcessor {
     /// Written by audio thread, polled by main-thread timer.
     var latestWaveform = [Float](repeating: 0, count: 128)
 
+    // MARK: - Shazam accumulation buffer
+    // Pre-allocated at 48 000 × 15 s = 720 000 floats (~2.8 MB).
+    // The audio thread writes; the main thread reads when shazamReady is true.
+    // Benign data race on shazamReady / shazamAccumCount — intentional, safe on ARM64.
+    private let shazamCapacity = 48000 * 15
+    var shazamAccum = [Float](repeating: 0, count: 48000 * 15)
+    var shazamAccumCount: Int = 0
+    var shazamSampleRate: Float = 44100
+    var shazamReady: Bool = false
+
     // MARK: - EQ parameters
     // Written from the main thread, read on the audio thread.
     // Benign data race — intentional, safe on ARM64 (same pattern as latestWaveform).
@@ -82,6 +92,7 @@ final class AudioTapProcessor {
     fileprivate func setSampleRate(_ rate: Float) {
         guard rate > 0, rate != sampleRate else { return }
         sampleRate = rate
+        shazamSampleRate = rate
         eqDirty = true
     }
 
@@ -209,6 +220,21 @@ final class AudioTapProcessor {
                 ? 0.5  * bins[i] + 0.5  * smoothed[i]
                 : 0.15 * bins[i] + 0.85 * smoothed[i]
             latestMagnitudes[i] = smoothed[i]
+        }
+
+        // Accumulate mono samples for Shazam identification.
+        // No allocation — writes into the pre-allocated shazamAccum array.
+        // Stops when 12 s of audio is collected; main thread resets the counter.
+        if !shazamReady {
+            let target = Int(shazamSampleRate * 12)
+            let space  = min(shazamCapacity, target) - shazamAccumCount
+            guard space > 0 else { shazamReady = true; return }
+            let toCopy = min(sampleCount, space)
+            shazamAccum.withUnsafeMutableBufferPointer { buf in
+                (buf.baseAddress! + shazamAccumCount).update(from: floatPtr, count: toCopy)
+            }
+            shazamAccumCount += toCopy
+            if shazamAccumCount >= target { shazamReady = true }
         }
     }
 }

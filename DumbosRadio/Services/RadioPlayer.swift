@@ -1,6 +1,7 @@
 import AVFoundation
 import AppKit
 import Combine
+import ShazamKit
 
 enum PlaybackState: Equatable {
     case idle
@@ -26,6 +27,9 @@ class RadioPlayer: ObservableObject {
     @Published var currentStation: Station?
     /// Current song/track title from ICY/HLS stream metadata, if the stream provides it.
     @Published var streamTitle: String?
+    /// Most recent Shazam match for the currently playing audio, or nil.
+    @Published var shazamMatch: SHMediaItem? = nil
+    @Published var isShazamMatching: Bool = false
 
     private var player: AVPlayer?
     private var playerItem: AVPlayerItem?
@@ -38,11 +42,31 @@ class RadioPlayer: ObservableObject {
 
     private let persistence: PersistenceManager
     private var cancellables = Set<AnyCancellable>()
+    private let shazamService = ShazamService()
+    private var shazamCheckTimer: Timer?
 
     init(persistence: PersistenceManager) {
         self.persistence = persistence
         persistence.$eqSettings
             .sink { [weak self] _ in self?.applyEQ() }
+            .store(in: &cancellables)
+        // Bridge ShazamService's properties into RadioPlayer's @Published vars
+        // so SwiftUI views re-render when a match arrives.
+        shazamService.$match
+            .sink { [weak self] in self?.shazamMatch = $0 }
+            .store(in: &cancellables)
+        shazamService.$isMatching
+            .sink { [weak self] in self?.isShazamMatching = $0 }
+            .store(in: &cancellables)
+        // Clear the Shazam match when ICY metadata indicates a track change.
+        $streamTitle
+            .dropFirst()
+            .sink { [weak self] _ in
+                guard let self else { return }
+                self.shazamService.reset()
+                self.audioTap?.shazamAccumCount = 0
+                self.audioTap?.shazamReady = false
+            }
             .store(in: &cancellables)
     }
 
@@ -82,6 +106,12 @@ class RadioPlayer: ObservableObject {
         // AVMutableAudioMixInputParameters() with no track sets trackID to
         // kCMPersistentTrackID_Invalid, applying to ALL audio tracks —
         // no track discovery needed, works for ICY/Shoutcast/HLS/MP3.
+        shazamService.reset()
+        shazamCheckTimer?.invalidate()
+        shazamCheckTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { [weak self] _ in
+            Task { @MainActor [weak self] in self?.checkShazamBuffer() }
+        }
+
         let tap = AudioTapProcessor()
         audioTap = tap
 
@@ -149,6 +179,10 @@ class RadioPlayer: ObservableObject {
         timeControlObservation = nil
         bufferingObservation = nil
 
+        shazamCheckTimer?.invalidate()
+        shazamCheckTimer = nil
+        shazamService.reset()
+
         player?.pause()
         player = nil
         playerItem = nil
@@ -167,6 +201,22 @@ class RadioPlayer: ObservableObject {
         } else {
             stop()
         }
+    }
+
+    // MARK: - Shazam
+
+    private func checkShazamBuffer() {
+        guard case .playing = state,
+              let tap = audioTap,
+              tap.shazamReady,
+              !shazamService.isMatching else { return }
+        let count = tap.shazamAccumCount
+        let sampleRate = tap.shazamSampleRate
+        let samples = Array(tap.shazamAccum.prefix(count))
+        // Reset accumulation for the next window
+        tap.shazamAccumCount = 0
+        tap.shazamReady = false
+        shazamService.identify(samples: samples, sampleRate: sampleRate)
     }
 
     // MARK: - EQ

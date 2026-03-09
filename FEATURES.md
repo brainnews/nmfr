@@ -17,6 +17,3 @@
 ## UI / UX
 - [x] Keyboard shortcuts for preset slots (⌘⇧1–⌘⇧6 in Playback menu, 1–6 bare on buttons)
 - Global hotkey to play/pause from anywhere (system-wide shortcut)
-
-## System Integration
-- Now Playing system widget (Control Center / lock screen metadata)

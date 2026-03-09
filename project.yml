@@ -49,6 +49,7 @@ targets:
       - sdk: Accelerate.framework
       - sdk: ServiceManagement.framework
       - sdk: UserNotifications.framework
+      - sdk: ShazamKit.framework
       - package: Sparkle
         product: Sparkle
     info:

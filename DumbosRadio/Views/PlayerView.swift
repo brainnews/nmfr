@@ -11,6 +11,7 @@ struct PlayerView: View {
     @State private var hoverViz  = false
     @State private var hoverEQ   = false
     @State private var showEQ    = false
+    @State private var now       = Date()
 
     private var playerBackground: Color {
         colorScheme == .dark ? Color(white: 0.08) : Color(white: 0.88)
@@ -46,20 +47,44 @@ struct PlayerView: View {
                         .foregroundStyle(.primary)
                         .lineLimit(1)
 
-                    // Meta — crossfades when stream title changes
+                    // Meta — shows Shazam match when available, else ICY stream title
                     HStack(spacing: 6) {
-                        Text(player.streamTitle ?? player.currentStation?.metaString ?? "Select a station to begin")
+                        let shazamMatch = player.shazamMatch
+                        let shazamText: String? = shazamMatch.flatMap { m in
+                            let parts = [m.artist, m.title].compactMap { $0 }.filter { !$0.isEmpty }
+                            return parts.isEmpty ? nil : parts.joined(separator: " – ")
+                        }
+                        let displayText = shazamText
+                            ?? player.streamTitle
+                            ?? player.currentStation?.metaString
+                            ?? "Select a station to begin"
+
+                        if shazamText != nil {
+                            Image(systemName: "music.note")
+                                .font(.system(size: 8))
+                                .foregroundStyle(Color.accentColor.opacity(0.7))
+                        } else if player.isShazamMatching {
+                            Image(systemName: "waveform.badge.magnifyingglass")
+                                .font(.system(size: 8))
+                                .foregroundStyle(Color.secondary.opacity(0.5))
+                        }
+
+                        Text(displayText)
                             .font(.system(size: 10, design: .monospaced))
                             .foregroundStyle(.secondary)
                             .lineLimit(1)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .contentTransition(.opacity)
-                            .animation(.easeInOut(duration: 0.35), value: player.streamTitle)
+                            .animation(.easeInOut(duration: 0.35), value: displayText)
 
                         if let station = player.currentStation {
-                            let query = (player.streamTitle ?? station.name)
+                            let query = (shazamText ?? player.streamTitle ?? station.name)
                                 .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
                             Menu {
+                                if let amURL = shazamMatch?.appleMusicURL {
+                                    Button("Open in Apple Music") { NSWorkspace.shared.open(amURL) }
+                                    Divider()
+                                }
                                 Button("Spotify")     { openURL("https://open.spotify.com/search/\(query)") }
                                 Button("Apple Music") { openURL("https://music.apple.com/search?term=\(query)") }
                                 Button("Bandcamp")    { openURL("https://bandcamp.com/search?q=\(query)") }
@@ -154,6 +179,22 @@ struct PlayerView: View {
                         .controlSize(.mini)
                         .frame(maxWidth: 80)
 
+                        // Sleep timer countdown
+                        if let end = persistence.sleepTimerEnd {
+                            Button(action: { persistence.sleepTimerEnd = nil }) {
+                                HStack(spacing: 2) {
+                                    Image(systemName: "moon.fill")
+                                        .font(.system(size: 8))
+                                    Text(sleepTimerLabel(end: end))
+                                        .font(.system(size: 9, design: .monospaced))
+                                }
+                                .foregroundStyle(.secondary)
+                            }
+                            .buttonStyle(.plain)
+                            .help("Sleep timer active — click to cancel")
+                            .transition(.opacity)
+                        }
+
                         // Status — slides in from trailing edge when buffering/error
                         if let status = player.state.statusText {
                             Text(status)
@@ -172,6 +213,19 @@ struct PlayerView: View {
         }
         .frame(height: 90)
         .background(playerBackground)
+        .onReceive(Timer.publish(every: 30, on: .main, in: .common).autoconnect()) { now = $0 }
+    }
+
+    private func sleepTimerLabel(end: Date) -> String {
+        let remaining = end.timeIntervalSince(now)
+        guard remaining > 0 else { return "" }
+        let minutes = Int(remaining / 60) + 1
+        if minutes >= 60 {
+            let hours = minutes / 60
+            let mins = minutes % 60
+            return mins == 0 ? "\(hours)h" : "\(hours)h\(mins)m"
+        }
+        return "\(minutes)m"
     }
 
     private func openURL(_ string: String) {

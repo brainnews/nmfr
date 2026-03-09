@@ -27,6 +27,13 @@ struct NMFRApp: App {
                     setupNowPlaying()
                     restoreLastStation()
                     GlobalShortcutManager.shared.setup(player: player, persistence: persistence)
+                    applyDockIconPolicy()
+                }
+                .onReceive(Timer.publish(every: 5, on: .main, in: .common).autoconnect()) { _ in
+                    if let end = persistence.sleepTimerEnd, Date() >= end {
+                        persistence.sleepTimerEnd = nil
+                        player.stop()
+                    }
                 }
         }
         .windowStyle(.hiddenTitleBar)
@@ -71,8 +78,28 @@ struct NMFRApp: App {
                             player.play(station)
                         }
                     }
-                    .keyboardShortcut(KeyEquivalent(Character("\(i + 1)")), modifiers: [.command, .shift])
+                    .keyboardShortcut(KeyEquivalent(Character("\(i + 1)")), modifiers: [.command, .option])
                     .disabled(persistence.presets[i] == nil)
+                }
+
+                Divider()
+
+                Menu("Sleep Timer") {
+                    if persistence.sleepTimerEnd != nil {
+                        Button("Cancel Timer") {
+                            persistence.sleepTimerEnd = nil
+                        }
+                        Divider()
+                    }
+                    Button("15 Minutes") {
+                        persistence.sleepTimerEnd = Date().addingTimeInterval(15 * 60)
+                    }
+                    Button("30 Minutes") {
+                        persistence.sleepTimerEnd = Date().addingTimeInterval(30 * 60)
+                    }
+                    Button("1 Hour") {
+                        persistence.sleepTimerEnd = Date().addingTimeInterval(60 * 60)
+                    }
                 }
             }
         }
@@ -114,6 +141,10 @@ struct NMFRApp: App {
                 }
             }
         }
+    }
+
+    private func applyDockIconPolicy() {
+        NSApp.setActivationPolicy(persistence.hideDockIcon ? .accessory : .regular)
     }
 
     private func setupNowPlaying() {

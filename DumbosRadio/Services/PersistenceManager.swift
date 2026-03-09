@@ -51,6 +51,12 @@ class PersistenceManager: ObservableObject {
     @Published var globalShortcutsEnabled: Bool = true {
         didSet { UserDefaults.standard.set(globalShortcutsEnabled, forKey: "globalShortcutsEnabled") }
     }
+    @Published var hideDockIcon: Bool = false {
+        didSet { UserDefaults.standard.set(hideDockIcon, forKey: "hideDockIcon") }
+    }
+
+    // MARK: - Sleep Timer (runtime only — not persisted)
+    @Published var sleepTimerEnd: Date? = nil
 
     // MARK: - Visualizer Settings
     @Published var visualizerColorMode: String = "rainbow" {
@@ -109,6 +115,7 @@ class PersistenceManager: ObservableObject {
         launchAtLogin = ud.bool(forKey: "launchAtLogin")
         notificationsEnabled = ud.object(forKey: "notificationsEnabled") as? Bool ?? true
         globalShortcutsEnabled = ud.object(forKey: "globalShortcutsEnabled") as? Bool ?? true
+        hideDockIcon = ud.bool(forKey: "hideDockIcon")
         visualizerColorMode = ud.string(forKey: "visualizerColorMode") ?? "rainbow"
         visualizerSolidColor = loadObject(StorableColor.self, forKey: "visualizerSolidColor") ?? .default
         visualizerCRTEnabled = ud.bool(forKey: "visualizerCRTEnabled")

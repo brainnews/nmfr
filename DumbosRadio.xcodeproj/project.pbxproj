@@ -10,6 +10,7 @@
 		0547F2181DAD0C9B944F39E8 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4502C000B1FEB6F9DF2EAB53 /* PersistenceManager.swift */; };
 		06A6A5AD5DBBFBB780C54DC7 /* BrowseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E21EFBBB3CA7597E29C461 /* BrowseView.swift */; };
 		082C9A44C468BF4361F23D98 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F02F30F3F9F8EFA01DF83EF /* PreferencesView.swift */; };
+		17F6651C4D71372F55B3B025 /* ShazamService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F930562B823303A533D3DDE6 /* ShazamService.swift */; };
 		1B240E73A90EAD8889A90D2A /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D618707B3F705ACE52424895 /* MenuBarView.swift */; };
 		26E9367271E4FBB864634B92 /* LibraryExportData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C504A56D0EB0D16C53246DE /* LibraryExportData.swift */; };
 		29EA0EC457199FA93F3CDC55 /* GlobalShortcutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0C03D4E55A4785567A807C /* GlobalShortcutManager.swift */; };
@@ -36,6 +37,7 @@
 		B816BFE4A8DCF82E6F720815 /* VisualizerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C6E22B4C8CB0D1C3877E13 /* VisualizerView.swift */; };
 		BBF9C554428F832E34036280 /* HistoryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A5CD5304BC98D82810510D /* HistoryEntry.swift */; };
 		BC1C885C7906C822712D3DBA /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC841C0EC9532DF4F118EB55 /* PlayerView.swift */; };
+		CBB0605704F5FEE16E1CD7B3 /* ShazamKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE691F480036B9A30D1C97A4 /* ShazamKit.framework */; };
 		CC22500E7E7A6304622EDEDB /* EQView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D5BE6F0F369CAE31C5715FE /* EQView.swift */; };
 		CDE4E30ED60EF23DA4479D00 /* RadioBrowserAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4647743AF4FF132E9FE2E16 /* RadioBrowserAPI.swift */; };
 		D2249B34CCE92A1B270D16C8 /* NowPlayingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 391B13E88E3E58696E019DFA /* NowPlayingManager.swift */; };
@@ -78,6 +80,7 @@
 		BF453C333FE2F68320C42570 /* MediaToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaToolbox.framework; path = System/Library/Frameworks/MediaToolbox.framework; sourceTree = SDKROOT; };
 		CB464266F77285FCF5941908 /* StorableColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorableColor.swift; sourceTree = "<group>"; };
 		CC841C0EC9532DF4F118EB55 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		CE691F480036B9A30D1C97A4 /* ShazamKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ShazamKit.framework; path = System/Library/Frameworks/ShazamKit.framework; sourceTree = SDKROOT; };
 		D2E21EFBBB3CA7597E29C461 /* BrowseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseView.swift; sourceTree = "<group>"; };
 		D4A5CD5304BC98D82810510D /* HistoryEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryEntry.swift; sourceTree = "<group>"; };
 		D618707B3F705ACE52424895 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
@@ -88,6 +91,7 @@
 		F6232A273A185F83E088F04F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F657C59D467AE2C903DD4AD2 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		F71911DC8C8BF76A404E618C /* LibraryPrefsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPrefsView.swift; sourceTree = "<group>"; };
+		F930562B823303A533D3DDE6 /* ShazamService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShazamService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +105,7 @@
 				E883890FBD02591C21DBE487 /* Accelerate.framework in Frameworks */,
 				4C7DB549004950CD25CB3FD9 /* ServiceManagement.framework in Frameworks */,
 				5C64C5FC860CC0B65BEDCC9C /* UserNotifications.framework in Frameworks */,
+				CBB0605704F5FEE16E1CD7B3 /* ShazamKit.framework in Frameworks */,
 				97EF961B2ED2D0E820A5B7CB /* Sparkle in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -167,6 +172,7 @@
 				5271FEA2E84E09FEA03670E8 /* MediaPlayer.framework */,
 				BF453C333FE2F68320C42570 /* MediaToolbox.framework */,
 				3EFC64DC037FED3225717580 /* ServiceManagement.framework */,
+				CE691F480036B9A30D1C97A4 /* ShazamKit.framework */,
 				32D244A47C8830C09C735E15 /* UserNotifications.framework */,
 			);
 			name = Frameworks;
@@ -182,6 +188,7 @@
 				4502C000B1FEB6F9DF2EAB53 /* PersistenceManager.swift */,
 				A4647743AF4FF132E9FE2E16 /* RadioBrowserAPI.swift */,
 				AF55100D6E7CE687DB181F1D /* RadioPlayer.swift */,
+				F930562B823303A533D3DDE6 /* ShazamService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -300,6 +307,7 @@
 				CDE4E30ED60EF23DA4479D00 /* RadioBrowserAPI.swift in Sources */,
 				7DF227BB325129F21FCF359D /* RadioPlayer.swift in Sources */,
 				3643C25E5287EF4CC1859CA2 /* SearchView.swift in Sources */,
+				17F6651C4D71372F55B3B025 /* ShazamService.swift in Sources */,
 				E0148044836A7BE6B3BE2756 /* Station.swift in Sources */,
 				B0B27EC3FB467C937E74E527 /* StationArtworkView.swift in Sources */,
 				94635CB85A7538F2EC0F87D9 /* StationBrowserView.swift in Sources */,

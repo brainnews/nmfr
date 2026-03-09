@@ -1,4 +1,5 @@
 import SwiftUI
+import AppKit
 import ServiceManagement
 
 struct PreferencesView: View {
@@ -41,6 +42,14 @@ struct GeneralPrefsView: View {
                 ))
 
                 Toggle("Start in Menu Bar Mode", isOn: $persistence.menuBarMode)
+
+                Toggle("Hide Dock Icon", isOn: Binding(
+                    get: { persistence.hideDockIcon },
+                    set: { v in
+                        persistence.hideDockIcon = v
+                        NSApp.setActivationPolicy(v ? .accessory : .regular)
+                    }
+                ))
             }
 
             Section("Notifications") {
@@ -125,7 +134,7 @@ struct ShortcutsPrefsView: View {
                 shortcutRow("Play / Stop", keys: "⌘⇧P")
                 shortcutRow("Mute / Unmute", keys: "⌘⇧M")
                 shortcutRow("Toggle Visualizer", keys: "⌘⇧V")
-                shortcutRow("Preset 1–6", keys: "⌘⇧1 – 6")
+                shortcutRow("Preset 1–6", keys: "⌘⌥1 – 6")
                 shortcutRow("Open Preferences", keys: "⌘,")
             }
         }

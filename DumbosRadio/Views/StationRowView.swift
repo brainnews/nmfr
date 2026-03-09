@@ -135,5 +135,11 @@ struct StationRowView: View {
             }
         }
         .onHover { hovering = $0 }
+        .contextMenu {
+            Button("Copy Stream URL") {
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.setString(station.url, forType: .string)
+            }
+        }
     }
 }
