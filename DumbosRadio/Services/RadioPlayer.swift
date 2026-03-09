@@ -1,6 +1,7 @@
 import AVFoundation
 import AppKit
 import Combine
+import CoreSpotlight
 import ShazamKit
 
 enum PlaybackState: Equatable {
@@ -23,6 +24,8 @@ enum PlaybackState: Equatable {
 
 @MainActor
 class RadioPlayer: ObservableObject {
+    /// Accessible from App Intents and other non-SwiftUI contexts.
+    static var shared: RadioPlayer?
     @Published var state: PlaybackState = .idle
     @Published var currentStation: Station?
     /// Current song/track title from ICY/HLS stream metadata, if the stream provides it.
@@ -44,9 +47,11 @@ class RadioPlayer: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     private let shazamService = ShazamService()
     private var shazamCheckTimer: Timer?
+    private var currentUserActivity: NSUserActivity?
 
     init(persistence: PersistenceManager) {
         self.persistence = persistence
+        RadioPlayer.shared = self
         persistence.$eqSettings
             .sink { [weak self] _ in self?.applyEQ() }
             .store(in: &cancellables)
@@ -86,6 +91,7 @@ class RadioPlayer: ObservableObject {
         state = .loading
         streamTitle = nil
         persistence.lastStation = station
+        donateActivity(for: station)
 
         guard let url = URL(string: station.url) else {
             state = .error("Invalid stream URL")
@@ -182,6 +188,8 @@ class RadioPlayer: ObservableObject {
         shazamCheckTimer?.invalidate()
         shazamCheckTimer = nil
         shazamService.reset()
+        currentUserActivity?.invalidate()
+        currentUserActivity = nil
 
         player?.pause()
         player = nil
@@ -217,6 +225,25 @@ class RadioPlayer: ObservableObject {
         tap.shazamAccumCount = 0
         tap.shazamReady = false
         shazamService.identify(samples: samples, sampleRate: sampleRate)
+    }
+
+    // MARK: - Spotlight / NSUserActivity
+
+    private func donateActivity(for station: Station) {
+        let activity = NSUserActivity(activityType: "com.miles.NotMyFirstRadio.playStation")
+        activity.title = "Play \(station.name)"
+        activity.isEligibleForSearch = true
+        activity.persistentIdentifier = NSUserActivityPersistentIdentifier(station.url)
+
+        let attributes = CSSearchableItemAttributeSet(contentType: .audio)
+        attributes.title = station.name
+        attributes.contentDescription = station.metaString
+        if let favicon = station.faviconURL { attributes.thumbnailURL = favicon }
+        activity.contentAttributeSet = attributes
+
+        currentUserActivity?.invalidate()
+        currentUserActivity = activity
+        activity.becomeCurrent()
     }
 
     // MARK: - EQ

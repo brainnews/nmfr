@@ -50,11 +50,15 @@ targets:
       - sdk: ServiceManagement.framework
       - sdk: UserNotifications.framework
       - sdk: ShazamKit.framework
+      - sdk: CoreSpotlight.framework
+      - sdk: AppIntents.framework
       - package: Sparkle
         product: Sparkle
     info:
       path: DumbosRadio/Info.plist
       properties:
+        NSUserActivityTypes:
+          - com.miles.NotMyFirstRadio.playStation
         LSApplicationCategoryType: public.app-category.music
         NSUserNotificationAlertStyle: alert
         NSAppTransportSecurity:

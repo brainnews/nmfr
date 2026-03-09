@@ -16,6 +16,8 @@
 		29EA0EC457199FA93F3CDC55 /* GlobalShortcutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0C03D4E55A4785567A807C /* GlobalShortcutManager.swift */; };
 		2C7F3230D379F7DA9CFF6E22 /* AudioTapProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784CEC7FD49A60494C3FA760 /* AudioTapProcessor.swift */; };
 		3643C25E5287EF4CC1859CA2 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601C7B2133257A9C9735A260 /* SearchView.swift */; };
+		36B3E0AD21F546E26827340E /* PlayStationIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B522EFD757DDF55F78D9669 /* PlayStationIntent.swift */; };
+		38F196B717749CD2B1590721 /* StationEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54BF53A99D036FC58DFCF367 /* StationEntity.swift */; };
 		3F67CB9E0C5AD1DED1976869 /* PresetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC06BF0652A3A446C13F9A /* PresetsView.swift */; };
 		4C7DB549004950CD25CB3FD9 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EFC64DC037FED3225717580 /* ServiceManagement.framework */; };
 		5C64C5FC860CC0B65BEDCC9C /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32D244A47C8830C09C735E15 /* UserNotifications.framework */; };
@@ -28,6 +30,7 @@
 		84497E21FDB5EC20DF79193D /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F657C59D467AE2C903DD4AD2 /* AboutView.swift */; };
 		84FD311CDC9F1CABBEB6C88C /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BBF9E1E5EC94100A0B47FA /* HistoryView.swift */; };
 		85251374E489FE37E45080DD /* LibraryPrefsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71911DC8C8BF76A404E618C /* LibraryPrefsView.swift */; };
+		86DB4059DF68D917036C9D52 /* AppIntents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7705572AEE4020577AC1E01E /* AppIntents.framework */; };
 		94635CB85A7538F2EC0F87D9 /* StationBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A87E3089E0FB2AED3BBDF57 /* StationBrowserView.swift */; };
 		97B82853267AFBE218604962 /* StationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA134E40F9CB0C05CD1170C6 /* StationListView.swift */; };
 		97EF961B2ED2D0E820A5B7CB /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = E59374B4CD851332B187F6BC /* Sparkle */; };
@@ -41,6 +44,7 @@
 		CC22500E7E7A6304622EDEDB /* EQView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D5BE6F0F369CAE31C5715FE /* EQView.swift */; };
 		CDE4E30ED60EF23DA4479D00 /* RadioBrowserAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4647743AF4FF132E9FE2E16 /* RadioBrowserAPI.swift */; };
 		D2249B34CCE92A1B270D16C8 /* NowPlayingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 391B13E88E3E58696E019DFA /* NowPlayingManager.swift */; };
+		D73B1CFBED38C82B7C1EA4DC /* CoreSpotlight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B7DB925BE9B5030AFC5244B /* CoreSpotlight.framework */; };
 		D95856DCAA96632681E6C52D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1233B6D481F15858C74A86D5 /* Assets.xcassets */; };
 		E0148044836A7BE6B3BE2756 /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73556213FE4FB69A042F2D0 /* Station.swift */; };
 		E883890FBD02591C21DBE487 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46A3EB58E06EA11C9DBEDFEE /* Accelerate.framework */; };
@@ -52,6 +56,7 @@
 /* Begin PBXFileReference section */
 		09956C042F61E6C9DAB9C44A /* DumbosRadioApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DumbosRadioApp.swift; sourceTree = "<group>"; };
 		1233B6D481F15858C74A86D5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1B522EFD757DDF55F78D9669 /* PlayStationIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayStationIntent.swift; sourceTree = "<group>"; };
 		1C504A56D0EB0D16C53246DE /* LibraryExportData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryExportData.swift; sourceTree = "<group>"; };
 		2EBC06BF0652A3A446C13F9A /* PresetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetsView.swift; sourceTree = "<group>"; };
 		2F02F30F3F9F8EFA01DF83EF /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
@@ -62,13 +67,16 @@
 		4551550294CEE61A4F1104E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		46A3EB58E06EA11C9DBEDFEE /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		5271FEA2E84E09FEA03670E8 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		54BF53A99D036FC58DFCF367 /* StationEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationEntity.swift; sourceTree = "<group>"; };
 		5726461EF622DD95A60AE66D /* StationRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationRowView.swift; sourceTree = "<group>"; };
 		5A87E3089E0FB2AED3BBDF57 /* StationBrowserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationBrowserView.swift; sourceTree = "<group>"; };
+		5B7DB925BE9B5030AFC5244B /* CoreSpotlight.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreSpotlight.framework; path = System/Library/Frameworks/CoreSpotlight.framework; sourceTree = SDKROOT; };
 		5D5BE6F0F369CAE31C5715FE /* EQView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EQView.swift; sourceTree = "<group>"; };
 		601C7B2133257A9C9735A260 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		6155ECB31E05B8AA3BE01AA8 /* StationArtworkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationArtworkView.swift; sourceTree = "<group>"; };
 		729B0EB484DA3446B554B03C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		76FD1628B656B54DB8BDD92D /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		7705572AEE4020577AC1E01E /* AppIntents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppIntents.framework; path = System/Library/Frameworks/AppIntents.framework; sourceTree = SDKROOT; };
 		784CEC7FD49A60494C3FA760 /* AudioTapProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioTapProcessor.swift; sourceTree = "<group>"; };
 		7AAD06A48E0B195C2374BF6A /* DumbosRadio.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DumbosRadio.entitlements; sourceTree = "<group>"; };
 		7E89A3D285B62561F3027619 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
@@ -106,6 +114,8 @@
 				4C7DB549004950CD25CB3FD9 /* ServiceManagement.framework in Frameworks */,
 				5C64C5FC860CC0B65BEDCC9C /* UserNotifications.framework in Frameworks */,
 				CBB0605704F5FEE16E1CD7B3 /* ShazamKit.framework in Frameworks */,
+				D73B1CFBED38C82B7C1EA4DC /* CoreSpotlight.framework in Frameworks */,
+				86DB4059DF68D917036C9D52 /* AppIntents.framework in Frameworks */,
 				97EF961B2ED2D0E820A5B7CB /* Sparkle in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -168,7 +178,9 @@
 			isa = PBXGroup;
 			children = (
 				46A3EB58E06EA11C9DBEDFEE /* Accelerate.framework */,
+				7705572AEE4020577AC1E01E /* AppIntents.framework */,
 				76FD1628B656B54DB8BDD92D /* AVFoundation.framework */,
+				5B7DB925BE9B5030AFC5244B /* CoreSpotlight.framework */,
 				5271FEA2E84E09FEA03670E8 /* MediaPlayer.framework */,
 				BF453C333FE2F68320C42570 /* MediaToolbox.framework */,
 				3EFC64DC037FED3225717580 /* ServiceManagement.framework */,
@@ -176,6 +188,15 @@
 				32D244A47C8830C09C735E15 /* UserNotifications.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		94BFAC20452A4861C652D882 /* AppIntents */ = {
+			isa = PBXGroup;
+			children = (
+				1B522EFD757DDF55F78D9669 /* PlayStationIntent.swift */,
+				54BF53A99D036FC58DFCF367 /* StationEntity.swift */,
+			);
+			path = AppIntents;
 			sourceTree = "<group>";
 		};
 		A553AD432B524D41C7D13567 /* Services */ = {
@@ -202,6 +223,7 @@
 				7AAD06A48E0B195C2374BF6A /* DumbosRadio.entitlements */,
 				09956C042F61E6C9DAB9C44A /* DumbosRadioApp.swift */,
 				F6232A273A185F83E088F04F /* Info.plist */,
+				94BFAC20452A4861C652D882 /* AppIntents */,
 				816E12CC27F26F571ED10214 /* Models */,
 				A553AD432B524D41C7D13567 /* Services */,
 				431A396DD2D0CF817E889664 /* Views */,
@@ -301,6 +323,7 @@
 				F80895623CAC7C2B59E08B93 /* NotificationManager.swift in Sources */,
 				D2249B34CCE92A1B270D16C8 /* NowPlayingManager.swift in Sources */,
 				0547F2181DAD0C9B944F39E8 /* PersistenceManager.swift in Sources */,
+				36B3E0AD21F546E26827340E /* PlayStationIntent.swift in Sources */,
 				BC1C885C7906C822712D3DBA /* PlayerView.swift in Sources */,
 				082C9A44C468BF4361F23D98 /* PreferencesView.swift in Sources */,
 				3F67CB9E0C5AD1DED1976869 /* PresetsView.swift in Sources */,
@@ -311,6 +334,7 @@
 				E0148044836A7BE6B3BE2756 /* Station.swift in Sources */,
 				B0B27EC3FB467C937E74E527 /* StationArtworkView.swift in Sources */,
 				94635CB85A7538F2EC0F87D9 /* StationBrowserView.swift in Sources */,
+				38F196B717749CD2B1590721 /* StationEntity.swift in Sources */,
 				97B82853267AFBE218604962 /* StationListView.swift in Sources */,
 				77E4440D9251DA142309855B /* StationRowView.swift in Sources */,
 				7AE6FA142E31FCEFE4FDB24F /* StorableColor.swift in Sources */,

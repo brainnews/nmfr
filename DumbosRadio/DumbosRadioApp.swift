@@ -35,6 +35,12 @@ struct NMFRApp: App {
                         player.stop()
                     }
                 }
+                .onContinueUserActivity("com.miles.NotMyFirstRadio.playStation") { activity in
+                    guard let urlString = activity.persistentIdentifier else { return }
+                    let station = persistence.stations.first(where: { $0.url == urlString })
+                        ?? persistence.lastStation
+                    if let station { player.play(station) }
+                }
         }
         .windowStyle(.hiddenTitleBar)
         .windowResizability(.contentSize)
