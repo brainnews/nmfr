@@ -3,6 +3,8 @@ import AppKit
 import Sparkle
 
 struct AboutView: View {
+    let updater: SPUUpdater
+
     private var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
     }
@@ -21,9 +23,7 @@ struct AboutView: View {
                 .foregroundStyle(.secondary)
 
             Button("Check for Updates…") {
-                NSApp.sendAction(
-                    #selector(SPUStandardUpdaterController.checkForUpdates(_:)),
-                    to: nil, from: nil)
+                updater.checkForUpdates()
             }
             .font(.system(size: 11))
             .buttonStyle(.link)

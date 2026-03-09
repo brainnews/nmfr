@@ -67,8 +67,8 @@ targets:
         CFBundleIconFile: AppIcon
         CFBundleName: NMFR
         CFBundleDisplayName: "Not My First Radio"
-        CFBundleShortVersionString: "1.3"
-        CFBundleVersion: "4"
+        CFBundleShortVersionString: "1.4"
+        CFBundleVersion: "5"
         SUFeedURL: https://raw.githubusercontent.com/brainnews/nmfr/main/appcast.xml
         SUEnableAutomaticChecks: true
         SUPublicEDKey: "Wzk/V6IH08niG7Yx/lzff2HkQj8Ku9w2cW3UvSkjGq0="

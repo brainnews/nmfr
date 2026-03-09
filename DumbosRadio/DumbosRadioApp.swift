@@ -49,9 +49,7 @@ struct NMFRApp: App {
             CommandGroup(replacing: .appInfo) {
                 OpenAboutButton()
                 Button("Check for Updates…") {
-                    NSApp.sendAction(
-                        #selector(SPUStandardUpdaterController.checkForUpdates(_:)),
-                        to: nil, from: nil)
+                    updaterController.updater.checkForUpdates()
                 }
             }
 
@@ -128,7 +126,7 @@ struct NMFRApp: App {
 
         // About window
         Window("About Not My First Radio", id: "about") {
-            AboutView()
+            AboutView(updater: updaterController.updater)
         }
         .windowResizability(.contentSize)
         .windowStyle(.hiddenTitleBar)
